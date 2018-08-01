@@ -1,0 +1,25 @@
+body {
+    width: 400px;
+    height: 600px;
+    overflow-y: auto;
+}
+
+h1 {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.main-title {
+    text-align: center;
+}
+
+.flows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;   
+    height: 100%;
+}
