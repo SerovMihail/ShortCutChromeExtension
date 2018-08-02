@@ -1,8 +1,48 @@
-// chrome.commands.onCommand.addListener(function (command) {
+let copyToClipboard = (text) => {
+    let copyDiv = document.createElement('div')
+    copyDiv.contentEditable = true
+    document.body.appendChild(copyDiv)
+    copyDiv.innerHTML = text
+    copyDiv.unselectable = 'off'
+    copyDiv.focus()
+    document.execCommand('SelectAll')
+    document.execCommand('Copy', false, null)
+    document.body.removeChild(copyDiv)
+}
 
-//     //command = command.split('-')[1];
-//     handleAction(command);
-// });
+let selectTab = (direction) => {
+    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+        if (tabs.length <= 1) {
+            return
+        }
+        chrome.tabs.query({ currentWindow: true, active: true }, (currentTabInArray) => {
+            let currentTab = currentTabInArray[0]
+            let toSelect
+            switch (direction) {
+                case 'next':
+                    toSelect = tabs[(currentTab.index + 1 + tabs.length) % tabs.length]
+                    break
+                case 'previous':
+                    toSelect = tabs[(currentTab.index - 1 + tabs.length) % tabs.length]
+                    break
+                case 'first':
+                    toSelect = tabs[0]
+                    break
+                case 'last':
+                    toSelect = tabs[tabs.length - 1]
+                    break
+                default:
+                    let index = parseInt(direction) || 0
+                    if (index >= 1 && index <= tabs.length) {
+                        toSelect = tabs[index - 1]
+                    } else {
+                        return
+                    }
+            }
+            chrome.tabs.update(toSelect.id, { active: true })
+        })
+    })
+}
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const action = request.action
@@ -96,7 +136,8 @@ let handleAction = (action, request = {}) => {
         })
     } else if (action === 'copyurl') {
         chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
-            copyToClipboard(tab[0].url)
+            copyToClipboard(tab[0].url);
+            localStorage.clipboardData = tab[0].url;
         })
     } else if (action === 'movetableft') {
         chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
@@ -109,8 +150,10 @@ let handleAction = (action, request = {}) => {
             chrome.tabs.move(tab[0].id, { 'index': tab[0].index + 1 })
         })
     } else if (action === 'gototab') {
+        var clipboardData = localStorage.clipboardData;        
+
         let createNewTab = () => {
-            chrome.tabs.create({ url: request.openurl })
+            chrome.tabs.create({ url: clipboardData })
         }
         if (request.matchurl) {
             let queryOption = { url: request.matchurl }

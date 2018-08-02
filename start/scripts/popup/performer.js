@@ -37,9 +37,15 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
 
     $scope.typesOfShortcut = [
-        { 'id': 1, 'name': 'back' },
-        { 'id': 2, 'name': 'forward' },
-        { 'id': 3, 'name': 'reload' },
+        { 'id': 1, 'group' : 'Location', 'name': 'back', 'action' : 'back'},
+        { 'id': 2, 'group' : 'Location', 'name': 'forward', 'action' : 'forward'},
+        { 'id': 3, 'group' : 'Location', 'name': 'reload', 'action' :  'reload'},
+        { 'id': 4, 'group' : 'Location', 'name': 'copy current tab url', 'action' : 'copyurl'},       
+        { 'id': 5, 'group' : 'Tabs', 'name': 'new tab', 'action' : 'newtab'},
+        { 'id': 6, 'group' : 'Tabs', 'name': 'close tab', 'action' : 'closetab'},
+        { 'id': 7, 'group' : 'Tabs', 'name': 'previous tab', 'action' :  'prevtab'},
+        { 'id': 8, 'group' : 'Tabs', 'name': 'jump to tab using url in clipboard', 'action' :  'gototab'}
+             
     ]
 
     $scope.data = {
@@ -83,7 +89,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     $scope.createNewShortcut = function (flow, type, count, delay) {
 
         flow.shortcuts.push({
-            action: type,
+            action: type.action,
             index: flow.shortcuts.length + 1,
             count: count,
             delay: delay
@@ -107,7 +113,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.executeFlow = function (flowIndex) {
 
-        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
+        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);       
 
         chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
             // if (response) {
