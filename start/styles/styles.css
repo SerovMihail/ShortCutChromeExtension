@@ -32,11 +32,24 @@
     padding: 10px;
     border: 1px solid black;
     border-radius: 10px;
+    position: relative;
+}
+
+.wrapper .flows .flow-item .remove-flow {    
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 0px;
+    right: 0px;
+    border: 0;
+    padding: 0px;
+    background: transparent;
+    cursor: pointer;
 }
 
 .wrapper .flows .flow-item .item-header {
     display: flex;
-    width: 50%;
+    width: 60%;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
@@ -50,8 +63,7 @@
 }
 
 .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-item {
-    position: relative;
-    width: fit-content;
+    position: relative;    
     margin-bottom: 10px;
     margin-left: 10px;
     border: 1px solid black;
@@ -67,7 +79,7 @@
     top: 12px;
 }
 
-.wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-add-new::after {
+/* .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-add-new::after {
     content: "+";
     display: block;
     right: -38px;
@@ -93,4 +105,4 @@
     padding: 7px;
     border-radius: 10px 10px 10px 0;
 
-}
+} */

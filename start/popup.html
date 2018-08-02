@@ -6,15 +6,20 @@
     <title>ShortCut Extension</title>
 
     <!-- Styles reset and main file   -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="styles/normalize.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/select2.css">
+
 
     <script src="scripts/libs/jquery-3.3.1.min.js"></script>
     <script src="scripts/libs/angular.min.js"></script>
+    <script src="scripts/libs/select2.js"></script>
 
 </head>
 
-<body >
+<body>
 
 
 
@@ -22,20 +27,45 @@
 
         <h1 class="main-title">Chrome Shortcut Extension</h1>
 
-        <div ng-repeat="flow in data.flows" class="flows">
-            <div class="flow-item">
-                <div class="toggle"></div>
+        <form class="form-inline" ng-submit="createNewFlow()">
+
+            <div class="input-group input-group-sm mb-3">
+                    <input type="text" class="form-control" required placeholder="Write new flow name here" ng-model='newFlowName'>
+                <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
+                </div>
+            </div>
+
+           
+            
+        </form>
+
+
+        <div class="flows">
+            <div class="flow-item mb-3" ng-repeat="flow in data.flows">
+
+                <button type="button" class="remove-flow" ng-click='removeFlow(flow.index)'>x</button>
                 <div class="item-header">
                     <div class="item-name" ng-bind="flow.name"></div>
-                    <button class="execute-flow">Execute flow</button>
+                    <button type="button" class="btn btn-primary  btn-sm">Execute flow</button>
                 </div>
                 <div class="item-body">
                     <ol class="shortcuts-list">
-                        <li ng-repeat="shortcut in flow.shortcuts" class="shortcut-item shortcut-exist">
-
+                        <li ng-repeat="shortcut in flow.shortcuts" class="shortcut-item shortcut-exist mb-3">
+                            <p ng-bind='(shortcut.action) + " - " + (shortcut.count)'></p>
+                            <button ng-click='removeShortcut(flow, shortcut.index)'>x</button>
                         </li>
                         <!-- exist shortcuts will be here -->
                         <li class="shortcut-item shortcut-add-new">
+
+                            <!-- <ui-select ng-model="selected.value" theme="select2">
+                                <ui-select-match>
+                                    <span ng-bind="$select.selected.name"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
+                                    <span ng-bind="item.name"></span>
+                                </ui-select-choices>
+                            </ui-select> -->
                             <select name="Type of shortcut" id="">
                                 <optgroup label="Work with tab">
                                     <option value="back">Back</option>
