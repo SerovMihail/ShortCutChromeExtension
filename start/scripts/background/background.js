@@ -20,18 +20,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         //sendResponse(keys)
     }
 
-    settings.forEach(function(el) {
-        handleAction(el.action, request)
+    settings.forEach(function (el, index) {
+
+        setTimeout(() => {
+            handleAction(el.action, request);
+        }, el.delay * index * 1000);
+
     });
-    
+
 });
 
 
 
 let handleAction = (action, request = {}) => {
-    
-   if (action === 'nexttab') {
-       selectTab('next')
+
+    if (action === 'nexttab') {
+        selectTab('next')
     } else if (action === 'prevtab') {
         selectTab('previous')
     } else if (action === 'firsttab') {
@@ -137,7 +141,7 @@ let handleAction = (action, request = {}) => {
             chrome.windows.remove(tab[0].windowId)
         })
     } else if (action === 'back') {
-    chrome.tabs.executeScript(null, { 'code': 'window.history.back()' })
+        chrome.tabs.executeScript(null, { 'code': 'window.history.back()' })
     } else if (action === 'forward') {
         chrome.tabs.executeScript(null, { 'code': 'window.history.forward()' })
     } else if (action === 'reload') {

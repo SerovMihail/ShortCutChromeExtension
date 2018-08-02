@@ -40,14 +40,19 @@
 
         </form>
 
+        <div ng-if='data.flows.length == 0'>
+            <div class="alert alert-primary" role="alert">
+                You have no exist flow
+            </div>
+        </div>
 
-        <div class="flows">
+        <div class="flows" ng-if='data.flows.length > 0'>
             <div class="flow-item mb-3" ng-repeat="flow in data.flows track by $index">
 
                 <button type="button" class="remove-flow" ng-click='removeFlow(flow.index)'>x</button>
                 <div class="item-header">
                     <div class="item-name" ng-bind="flow.name"></div>
-                    <button type="button" class="btn btn-primary  btn-sm" ng-click="executeFlow($index)">Execute flow</button>
+                    <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
                 </div>
                 <div class="item-body">
                     <ol class="shortcuts-list">
@@ -58,9 +63,9 @@
                             <table class="table table-sm" style='margin-bottom: 0;'>
                                 <thead>
                                     <tr>
-                                        <th style='border-top: 0;'scope="col">Action</th>
-                                        <th style='border-top: 0;'scope="col">Count</th>
-                                        <th style='border-top: 0;'scope="col">Delay</th>
+                                        <th style='border-top: 0;' scope="col">Action</th>
+                                        <th style='border-top: 0;' scope="col">Count</th>
+                                        <th style='border-top: 0;' scope="col">Delay</th>
                                     </tr>
                                 </thead>
                                 <tbody>
