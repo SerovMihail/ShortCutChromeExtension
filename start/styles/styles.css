@@ -19,6 +19,7 @@
 .wrapper .main-title {
     margin-bottom: 15px;
     color: #a8a8a8;
+    font-size: 1.5em;
 }
 
 .wrapper .flows {
@@ -69,6 +70,18 @@
     border: 1px solid black;
     padding: 10px;
     border-radius: 10px;
+}
+
+.wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-item .remove-shortcut {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 0px;
+    right: 0px;
+    border: 0;
+    padding: 0px;
+    background: transparent;
+    cursor: pointer;
 }
 
 .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-item::before {

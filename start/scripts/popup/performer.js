@@ -34,23 +34,7 @@ var app = angular.module('ShortcutsFlow', []);
 
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
-    // $scope.data = {
-    //     flows: [
-    //         {
-    //             index: 1,
-    //             name: "Ownflow 1",
-    //             shortcuts : [
-    //                 {
-    //                     index: 1,
-    //                     action: "back",
-    //                     count: 1,
-    //                     sekDelay: 1
-    //                 }
-    //             ]
-    //         }
-    //     ]
 
-    // }
 
     $scope.typesOfShortcut = [
         { 'id': 1, 'name': 'back' },
@@ -62,6 +46,16 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         flows: []
     }
 
+    function init() {
+        if (!localStorage.flows) {
+            localStorage.flows = JSON.stringify($scope.data);
+        } else {
+            $scope.data = JSON.parse(localStorage.flows)
+        }
+            
+    }
+    init();
+
     // work with flows
 
     $scope.createNewFlow = function () {
@@ -72,12 +66,16 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         });
 
         $scope.newFlowName = "";
+
+        localStorage.flows = JSON.stringify($scope.data);
     }
 
     $scope.removeFlow = function (index) {
         $scope.data.flows = $scope.data.flows.filter(function (e) {
             return e.index != index;
         });
+
+        localStorage.flows = JSON.stringify($scope.data);
     }
 
     // shortcuts
@@ -92,12 +90,16 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         });
 
         type = "";
+
+        localStorage.flows = JSON.stringify($scope.data);
     }
 
     $scope.removeShortcut = function (flow, shortcutIndex) {
-        flow = flow.shortcuts.filter(function (e) {
+        flow.shortcuts = flow.shortcuts.filter(function (e) {
             return e.index != shortcutIndex;
         });
+
+        localStorage.flows = JSON.stringify($scope.data);
     }
 
 
@@ -105,7 +107,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.executeFlow = function (flowIndex) {
 
-        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex - 1].shortcuts);
+        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
 
         chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
             // if (response) {
