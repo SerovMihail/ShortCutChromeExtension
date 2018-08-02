@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="ShortcutsFlow">
 
 <head>
     <meta charset="UTF-8">
@@ -10,33 +10,42 @@
     <link rel="stylesheet" href="styles/styles.css">
 
     <script src="scripts/libs/jquery-3.3.1.min.js"></script>
-    
+    <script src="scripts/libs/angular.min.js"></script>
+
 </head>
 
-<body>
+<body >
 
-    <div class="wrapper">
+
+
+    <div class="wrapper" ng-controller="ShortcutsCtrl">
 
         <h1 class="main-title">Chrome Shortcut Extension</h1>
 
-        <div class="flows">
+        <div ng-repeat="flow in data.flows" class="flows">
             <div class="flow-item">
                 <div class="toggle"></div>
                 <div class="item-header">
-                    <div class="item-name">OwnFlow #1</div>
+                    <div class="item-name" ng-bind="flow.name"></div>
                     <button class="execute-flow">Execute flow</button>
                 </div>
                 <div class="item-body">
                     <ol class="shortcuts-list">
-                        <li class="shortcut-item shortcut-exist">
-                            <button class="active">SHIFT</button>
-                            <button class="disabled">Alt</button>
-                            <button class="active">Ctrl</button>
+                        <li ng-repeat="shortcut in flow.shortcuts" class="shortcut-item shortcut-exist">
+
                         </li>
+                        <!-- exist shortcuts will be here -->
                         <li class="shortcut-item shortcut-add-new">
                             <select name="Type of shortcut" id="">
-                                <option value="Open url">Open url</option>
-                                <option value="Simple shortcut">Simple shortcut</option>                                
+                                <optgroup label="Work with tab">
+                                    <option value="back">Back</option>
+                                    <option value="forward">Forward</option>
+                                    <option value="reload">Reload</option>
+                                </optgroup>
+                                <optgroup label="Scroll">
+                                    <option value="top">Top</option>
+                                    <option value="bottom">Bottom</option>
+                                </optgroup>
                             </select>
                         </li>
                     </ol>
@@ -45,6 +54,7 @@
         </div>
     </div>
 
+    <script src="scripts/popup/loadExistShortcuts.js"></script>
     <script src="scripts/popup/performer.js"></script>
 
 </body>

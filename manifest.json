@@ -25,11 +25,12 @@
     "48": "/start/content/icons/64.png"
   },
   "permissions": [
-    "<all_urls>",
+    "clipboardWrite",
+    "storage",
+    "sessions",    
     "tabs",
     "activeTab",
-    "http://*/",
-    "https://*/"
+    "<all_urls>"
   ],
   "web_accessible_resources": [
     "*"

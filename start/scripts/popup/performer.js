@@ -8,7 +8,8 @@ $('.execute-flow').on('click', function () {
         keys: [{
             action: 'previousTab',
             count: 1,
-            sekDelay: 1
+            sekDelay: 1,
+            index: 1
         }]
     };
 
@@ -26,4 +27,46 @@ $('.execute-flow').on('click', function () {
         // }
         console.log(response);
     })
-})
+});
+
+var app = angular.module('ShortcutsFlow', []);
+
+app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
+
+
+    $scope.data = {
+        flows: [
+            {
+                index: 1,
+                name: "Ownflow 1",
+                shortcuts : [
+                    {
+                        index: 1,
+                        action: "back",
+                        count: 1,
+                        sekDelay: 1
+                    }
+                ]
+            }
+        ]
+    }
+}]);
+
+$('.shortcut-add-new').on('click', function () {
+    var prevElemIndexString = $(this).prev().attr('index');
+
+    if (!prevElemIndexString)
+        return;
+
+    var prevElemIndex = parseInt(prevElemIndexString);
+
+    var settings = JSON.parse(localStorage.shortkeys);
+
+    settings.keys.push({
+        action: 'back',
+        count: 1,
+        sekDelay: 1,
+        index: prevElemIndex + 1
+    });
+});
+
