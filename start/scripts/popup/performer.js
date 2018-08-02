@@ -52,6 +52,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         
     // }
 
+    $scope.typesOfShortcut = [
+        {'id': 1, 'name': 'Back'},
+        {'id': 2, 'name': 'Forward'},
+        {'id': 3, 'name': 'Reload'},
+    ]
 
     $scope.data = {
         flows: []
@@ -62,7 +67,8 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     $scope.createNewFlow = function() {
         $scope.data.flows.push({
             index: $scope.data.flows.length + 1,
-            name: $scope.newFlowName
+            name: $scope.newFlowName,
+            shortcuts: []
         });
 
         $scope.newFlowName = "";
@@ -75,6 +81,18 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     }
 
     // shortcuts
+
+    $scope.createNewShortcut = function(flow) {
+
+        flow.shortcuts.push({
+            action: $scope.newShortCutType,
+            index:  flow.shortcuts.length + 1,
+            count: $scope.newShortcutCount,
+            delay: $scope.newShortcutDelay
+        });
+
+        $scope.newShortCutType = "";
+    }
 
     $scope.removeShortcut = function(flow, shortcutIndex) {
         flow = flow.shortcuts.filter(function(e) {

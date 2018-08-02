@@ -30,14 +30,14 @@
         <form class="form-inline" ng-submit="createNewFlow()">
 
             <div class="input-group input-group-sm mb-3">
-                    <input type="text" class="form-control" required placeholder="Write new flow name here" ng-model='newFlowName'>
+                <input type="text" class="form-control" required placeholder="Write new flow name here" ng-model='newFlowName'>
                 <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
+                    <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
                 </div>
             </div>
 
-           
-            
+
+
         </form>
 
 
@@ -58,25 +58,19 @@
                         <!-- exist shortcuts will be here -->
                         <li class="shortcut-item shortcut-add-new">
 
-                            <!-- <ui-select ng-model="selected.value" theme="select2">
-                                <ui-select-match>
-                                    <span ng-bind="$select.selected.name"></span>
-                                </ui-select-match>
-                                <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-                                    <span ng-bind="item.name"></span>
-                                </ui-select-choices>
-                            </ui-select> -->
-                            <select name="Type of shortcut" id="">
-                                <optgroup label="Work with tab">
-                                    <option value="back">Back</option>
-                                    <option value="forward">Forward</option>
-                                    <option value="reload">Reload</option>
-                                </optgroup>
-                                <optgroup label="Scroll">
-                                    <option value="top">Top</option>
-                                    <option value="bottom">Bottom</option>
-                                </optgroup>
-                            </select>
+                            <form ng-submit="createNewShortcut(flow)">
+                                <select class="form-control" required ng-model="newShortCutType">
+                                    <option ng-selected="newShortCutType == item.name" ng-repeat="item in typesOfShortcut" ng-value="item.id">{{item.name}}</option>
+                                </select>
+
+
+                                <input type="number" required ng-model="newShortcutCount" placeholder="count">
+                                <input type="number" required ng-model="newShortcutDelay" placeholder="Delay">
+
+                                <button type="submit" class="btn btn-success btn-sm">Success</button>
+                            </form>
+
+
                         </li>
                     </ol>
                 </div>
