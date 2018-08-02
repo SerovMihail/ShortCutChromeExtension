@@ -44,8 +44,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 5, 'group' : 'Tabs', 'name': 'new tab', 'action' : 'newtab'},
         { 'id': 6, 'group' : 'Tabs', 'name': 'close tab', 'action' : 'closetab'},
         { 'id': 7, 'group' : 'Tabs', 'name': 'previous tab', 'action' :  'prevtab'},
-        { 'id': 8, 'group' : 'Tabs', 'name': 'jump to tab using url in clipboard', 'action' :  'gototab'}
-             
+        { 'id': 8, 'group' : 'Tabs', 'name': 'new tab using clipboard text', 'action' :  'gototab'}             
     ]
 
     $scope.data = {
