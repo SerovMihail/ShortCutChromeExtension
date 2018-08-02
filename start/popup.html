@@ -47,7 +47,7 @@
                 <button type="button" class="remove-flow" ng-click='removeFlow(flow.index)'>x</button>
                 <div class="item-header">
                     <div class="item-name" ng-bind="flow.name"></div>
-                    <button type="button" class="btn btn-primary  btn-sm">Execute flow</button>
+                    <button type="button" class="btn btn-primary  btn-sm" ng-click="executeFlow(flow.index)">Execute flow</button>
                 </div>
                 <div class="item-body">
                     <ol class="shortcuts-list">
@@ -58,14 +58,12 @@
                         <!-- exist shortcuts will be here -->
                         <li class="shortcut-item shortcut-add-new">
 
-                            <form ng-submit="createNewShortcut(flow)">
-                                <select class="form-control" required ng-model="newShortCutType">
-                                    <option ng-selected="newShortCutType == item.name" ng-repeat="item in typesOfShortcut" ng-value="item.id">{{item.name}}</option>
+                            <form ng-submit="createNewShortcut(flow, newShortcut.type, newShortcut.count, newShortcut.delay)">
+                                <select class="form-control" ng-model='newShortcut.type'>
+                                    <option ng-selected="newShortcut.type == item.name" ng-repeat="item in typesOfShortcut" ng-value="item.name">{{item.name}}</option>
                                 </select>
-
-
-                                <input type="number" required ng-model="newShortcutCount" placeholder="count">
-                                <input type="number" required ng-model="newShortcutDelay" placeholder="Delay">
+                                <input type="number" required ng-model="newShortcut.count" placeholder="count">
+                                <input type="number" required ng-model="newShortcut.delay" placeholder="Delay">
 
                                 <button type="submit" class="btn btn-success btn-sm">Success</button>
                             </form>
@@ -78,7 +76,6 @@
         </div>
     </div>
 
-    <script src="scripts/popup/loadExistShortcuts.js"></script>
     <script src="scripts/popup/performer.js"></script>
 
 </body>

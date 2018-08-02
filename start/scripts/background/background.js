@@ -8,18 +8,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const action = request.action
     if (action === 'getKeys') {
         //const currentUrl = request.url
-        var settings = JSON.parse(localStorage.shortkeys)
-        var keys = []
-        if (settings.keys.length > 0) {
-            settings.keys.forEach((key) => {
-                // if (isAllowedSite(key, currentUrl)) {
-                keys.push(key)
-                // }
-            })
-        }
-        sendResponse(keys)
+        var settings = JSON.parse(localStorage.currentFlow)
+        // var keys = []
+        // if (settings.keys.length > 0) {
+        //     settings.keys.forEach((key) => {
+        //         // if (isAllowedSite(key, currentUrl)) {
+        //         keys.push(key)
+        //         // }
+        //     })
+        // }
+        //sendResponse(keys)
     }
-    handleAction(action, request)
+
+    settings.forEach(function(el) {
+        handleAction(el.action, request)
+    });
+    
 });
 
 
