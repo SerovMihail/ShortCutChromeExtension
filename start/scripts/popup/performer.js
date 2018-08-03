@@ -37,17 +37,18 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
 
     $scope.typesOfShortcut = [
-        { 'id': 1, 'group' : 'Location', 'name': 'back', 'action' : 'back'},
-        { 'id': 2, 'group' : 'Location', 'name': 'forward', 'action' : 'forward'},
-        { 'id': 3, 'group' : 'Location', 'name': 'reload', 'action' :  'reload'},
-        { 'id': 4, 'group' : 'Location', 'name': 'copy current tab url', 'action' : 'copyurl'},       
-        { 'id': 5, 'group' : 'Tabs', 'name': 'new tab', 'action' : 'newtab'},
-        { 'id': 6, 'group' : 'Tabs', 'name': 'close tab', 'action' : 'closetab'},
-        { 'id': 7, 'group' : 'Tabs', 'name': 'previous tab', 'action' :  'prevtab'},
-        { 'id': 8, 'group' : 'Tabs', 'name': 'new tab using clipboard', 'action' :  'gototab'},             
-        { 'id': 9, 'group' : 'Document', 'name': 'Tabulation', 'action' :  'tab'},             
-        { 'id': 10, 'group' : 'Document', 'name': 'Copy focused text', 'action' :  'copyfocuedtext'},             
-        { 'id': 11, 'group' : 'Document', 'name': 'Click focused element', 'action' :  'clickfocusedelement'}             
+        { 'id': 1, 'group': 'Location', 'name': 'back', 'action': 'back' },
+        { 'id': 2, 'group': 'Location', 'name': 'forward', 'action': 'forward' },
+        { 'id': 3, 'group': 'Location', 'name': 'reload', 'action': 'reload' },
+        { 'id': 4, 'group': 'Location', 'name': 'copy current tab url', 'action': 'copyurl' },
+        { 'id': 5, 'group': 'Tabs', 'name': 'new tab', 'action': 'newtab' },
+        { 'id': 6, 'group': 'Tabs', 'name': 'close tab', 'action': 'closetab' },
+        { 'id': 7, 'group': 'Tabs', 'name': 'previous tab', 'action': 'prevtab' },
+        { 'id': 8, 'group': 'Tabs', 'name': 'new tab using buffer', 'action': 'gototab' },
+        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
+        { 'id': 10, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
+        { 'id': 11, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
+        { 'id': 12, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' }
     ]
 
     $scope.data = {
@@ -60,7 +61,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         } else {
             $scope.data = JSON.parse(localStorage.flows)
         }
-            
+
     }
     init();
 
@@ -90,8 +91,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.createNewShortcut = function (flow, type, count, delay) {
 
-        if(!count)
+        if (!count)
             count = 1;
+
+        if (!delay)
+            delay = 1;
 
         flow.shortcuts.push({
             action: type.action,
@@ -114,12 +118,18 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         localStorage.flows = JSON.stringify($scope.data);
     }
 
+    $scope.emulateTab = function () {
+
+        $.emulateTab(1);
+    }
+
+
 
     // execute
 
     $scope.executeFlow = function (flowIndex) {
 
-        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);       
+        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
 
         chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
             // if (response) {

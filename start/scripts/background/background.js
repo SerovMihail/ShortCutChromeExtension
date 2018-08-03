@@ -152,25 +152,26 @@ let handleAction = (action, count, request = {}) => {
     } else if (action === 'gototab') {
         var clipboardData = localStorage.clipboardData;
 
-        let createNewTab = () => {
-            chrome.tabs.create({ url: clipboardData })
-        }
-        if (request.matchurl) {
-            let queryOption = { url: request.matchurl }
-            if (request.currentWindow) {
-                queryOption.currentWindow = true
-            }
-            chrome.tabs.query(queryOption, function (tabs) {
-                if (tabs.length > 0) {
-                    chrome.tabs.update(tabs[0].id, { active: true })
-                    chrome.windows.update(tabs[0].windowId, { focused: true })
-                } else {
-                    createNewTab()
-                }
-            })
-        } else {
-            createNewTab()
-        }
+        chrome.tabs.create({ url: clipboardData });
+        // let createNewTab = () => {
+        //     chrome.tabs.create({ url: clipboardData })
+        // }
+        // if (request.matchurl) {
+        //     let queryOption = { url: request.matchurl }
+        //     if (request.currentWindow) {
+        //         queryOption.currentWindow = true
+        //     }
+        //     chrome.tabs.query(queryOption, function (tabs) {
+        //         if (tabs.length > 0) {
+        //             chrome.tabs.update(tabs[0].id, { active: true })
+        //             chrome.windows.update(tabs[0].windowId, { focused: true })
+        //         } else {
+        //             createNewTab()
+        //         }
+        //     })
+        // } else {
+        //    createNewTab()
+        //}
     } else if (action === 'gototabbyindex') {
         if (request.matchindex) {
             selectTab(request.matchindex)
@@ -196,11 +197,14 @@ let handleAction = (action, count, request = {}) => {
     } else if (action === 'tab') {
 
         var injectCode =
-            'var element = [].slice.call(document.querySelectorAll("a, object, input, iframe, [tabindex]"), ' + count + ', ' + (count + 1) + ')[0];' +
-            'element.style.border = "2px solid red";' +
+            'var element = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
+            'element.css({"border" : "2px solid red"});' +
             'element.focus();';
 
-        chrome.tabs.executeScript(null, { 'code': injectCode });
+        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+            chrome.tabs.executeScript(null, { 'code': injectCode });
+        });
+
 
     } else if (action === 'copyfocuedtext') {
 
@@ -208,11 +212,15 @@ let handleAction = (action, count, request = {}) => {
             , function (result) {
                 localStorage.clipboardData = result[0];
             });
-            
+
     } else if (action === 'clickfocusedelement') {
 
         chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' });
-            
+
+    } else if (action === 'pastinfocusedelement') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
+
     } else {
         return false
     }
