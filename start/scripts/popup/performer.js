@@ -116,14 +116,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         });
 
         localStorage.flows = JSON.stringify($scope.data);
-    }
-
-    $scope.emulateTab = function () {
-
-        $.emulateTab(1);
-    }
-
-
+    }    
 
     // execute
 
@@ -131,17 +124,34 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
         localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
 
-        chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
-            // if (response) {
-            //     Shortkeys.keys = response
-            //     if (Shortkeys.keys.length > 0) {
-            //         Shortkeys.keys.forEach((key) => {
-            //             Shortkeys.activateKey(key)
-            //         })
-            //     }
-            // }
-            console.log(response);
-        })
+
+
+        chrome.tabs.getSelected(null, function (tab) {
+            if (new RegExp("^(http|https)://").test(tab.url)) {
+
+                chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
+                    // if (response) {
+                    //     Shortkeys.keys = response
+                    //     if (Shortkeys.keys.length > 0) {
+                    //         Shortkeys.keys.forEach((key) => {
+                    //             Shortkeys.activateKey(key)
+                    //         })
+                    //     }
+                    // }
+                    console.log(response);
+                })
+            } else {
+                $scope.data.flows[flowIndex].error = "Unsupported active tab. Please change your location";
+                $scope.$applyAsync();                
+            }
+        });
+
+
+
+
+
+
+        
     }
 }]);
 
