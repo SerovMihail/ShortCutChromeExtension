@@ -30,5 +30,5 @@
 
 // });
 
-$("a, object, input, iframe, [tabindex]").slice(0, 1).focus();
+$("a, object, input, iframe, [tabindex]").slice(0, 1).focus().css({'background-color': 'green'});
 document.activeElement.style.backgroundColor = "green";

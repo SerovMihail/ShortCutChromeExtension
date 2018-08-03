@@ -44,7 +44,10 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 5, 'group' : 'Tabs', 'name': 'new tab', 'action' : 'newtab'},
         { 'id': 6, 'group' : 'Tabs', 'name': 'close tab', 'action' : 'closetab'},
         { 'id': 7, 'group' : 'Tabs', 'name': 'previous tab', 'action' :  'prevtab'},
-        { 'id': 8, 'group' : 'Tabs', 'name': 'new tab using clipboard text', 'action' :  'gototab'}             
+        { 'id': 8, 'group' : 'Tabs', 'name': 'new tab using clipboard', 'action' :  'gototab'},             
+        { 'id': 9, 'group' : 'Document', 'name': 'Tabulation', 'action' :  'tab'},             
+        { 'id': 10, 'group' : 'Document', 'name': 'Copy focused text', 'action' :  'copyfocuedtext'},             
+        { 'id': 11, 'group' : 'Document', 'name': 'Click focused element', 'action' :  'clickfocusedelement'}             
     ]
 
     $scope.data = {
@@ -87,8 +90,12 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.createNewShortcut = function (flow, type, count, delay) {
 
+        if(!count)
+            count = 1;
+
         flow.shortcuts.push({
             action: type.action,
+            name: type.name,
             index: flow.shortcuts.length + 1,
             count: count,
             delay: delay

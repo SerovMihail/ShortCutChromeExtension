@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     settings.forEach(function (el, index) {
 
         setTimeout(() => {
-            handleAction(el.action, request);
+            handleAction(el.action, el.count, request);
         }, el.delay * index * 1000);
 
     });
@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
 
-let handleAction = (action, request = {}) => {
+let handleAction = (action, count, request = {}) => {
 
     if (action === 'nexttab') {
         selectTab('next')
@@ -150,7 +150,7 @@ let handleAction = (action, request = {}) => {
             chrome.tabs.move(tab[0].id, { 'index': tab[0].index + 1 })
         })
     } else if (action === 'gototab') {
-        var clipboardData = localStorage.clipboardData;        
+        var clipboardData = localStorage.clipboardData;
 
         let createNewTab = () => {
             chrome.tabs.create({ url: clipboardData })
@@ -193,6 +193,26 @@ let handleAction = (action, request = {}) => {
         chrome.tabs.executeScript(null, { 'code': 'window.scrollTo(0, 0)' })
     } else if (action === 'bottom') {
         chrome.tabs.executeScript(null, { 'code': 'window.scrollTo(0, document.body.scrollHeight)' })
+    } else if (action === 'tab') {
+
+        var injectCode =
+            'var element = [].slice.call(document.querySelectorAll("a, object, input, iframe, [tabindex]"), ' + count + ', ' + (count + 1) + ')[0];' +
+            'element.style.border = "2px solid red";' +
+            'element.focus();';
+
+        chrome.tabs.executeScript(null, { 'code': injectCode });
+
+    } else if (action === 'copyfocuedtext') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText' }
+            , function (result) {
+                localStorage.clipboardData = result[0];
+            });
+            
+    } else if (action === 'clickfocusedelement') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' });
+            
     } else {
         return false
     }

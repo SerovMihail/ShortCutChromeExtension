@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     height: 600px;
-    width: 400px;
+    width: 450px;
     padding: 20px;
     overflow-y: auto;
 }
@@ -30,13 +30,13 @@
 }
 
 .wrapper .flows .flow-item {
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 10px;
+    padding: 10px;    
+    /* border: 1px solid black;
+    border-radius: 10px; */
     position: relative;
 }
 
-.wrapper .flows .flow-item .remove-flow {    
+.wrapper .flows .flow-item .remove-flow {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -50,10 +50,14 @@
 
 .wrapper .flows .flow-item .item-header {
     display: flex;
-    width: 60%;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.wrapper .flows .flow-item .item-name {
+    margin-right: 20px;
 }
 
 .wrapper .flows .flow-item .item-body .shortcuts-list {
@@ -64,10 +68,10 @@
 }
 
 .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-item {
-    position: relative;    
+    position: relative;
     margin-bottom: 10px;
     margin-left: 10px;
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     padding: 10px;
     border-radius: 10px;
 }
@@ -88,8 +92,8 @@
     content: counter(item) "  ";
     counter-increment: item;
     position: absolute;
-    left: -15px;
-    top: 12px;
+    left: -20px;
+    top: 35%;
 }
 
 /* .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-add-new::after {
