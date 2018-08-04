@@ -46,18 +46,10 @@ let selectTab = (direction) => {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const action = request.action
-    if (action === 'getKeys') {
-        //const currentUrl = request.url
+    if (action === 'executeFlow') {
+
         var settings = JSON.parse(localStorage.currentFlow)
-        // var keys = []
-        // if (settings.keys.length > 0) {
-        //     settings.keys.forEach((key) => {
-        //         // if (isAllowedSite(key, currentUrl)) {
-        //         keys.push(key)
-        //         // }
-        //     })
-        // }
-        //sendResponse(keys)
+
     }
 
     settings.forEach(function (el, index) {
@@ -74,6 +66,83 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 let handleAction = (action, count = {}) => {
 
+    if (action === 'newtab') {
+        chrome.tabs.create({})
+    } else if (action === 'prevtab') {
+        selectTab('previous')
+    } else if (action === 'closetab') {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
+            chrome.tabs.remove(tab[0].id)
+        })
+    } else if (action === 'copyurl') {
+        chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
+            copyToClipboard(tab[0].url);
+            localStorage.clipboardData = tab[0].url;
+        })
+    } else if (action === 'gototab') {
+        var clipboardData = localStorage.clipboardData;
+
+        chrome.tabs.create({ url: clipboardData });
+        // let createNewTab = () => {
+        //     chrome.tabs.create({ url: clipboardData })
+        // }
+        // if (request.matchurl) {
+        //     let queryOption = { url: request.matchurl }
+        //     if (request.currentWindow) {
+        //         queryOption.currentWindow = true
+        //     }
+        //     chrome.tabs.query(queryOption, function (tabs) {
+        //         if (tabs.length > 0) {
+        //             chrome.tabs.update(tabs[0].id, { active: true })
+        //             chrome.windows.update(tabs[0].windowId, { focused: true })
+        //         } else {
+        //             createNewTab()
+        //         }
+        //     })
+        // } else {
+        //    createNewTab()
+        //}
+    } else if (action === 'back') {
+        chrome.tabs.executeScript(null, { 'code': 'window.history.back()' })
+    } else if (action === 'forward') {
+        chrome.tabs.executeScript(null, { 'code': 'window.history.forward()' })
+    } else if (action === 'reload') {
+        chrome.tabs.executeScript(null, { 'code': 'window.location.reload()' })
+    } else if (action === 'tab') {
+
+        var injectCode =
+            'var element = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
+            'element.css({"border" : "2px solid red"});' +
+            'element.focus();';
+
+        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+            chrome.tabs.executeScript(null, { 'code': injectCode });
+        });
+
+    } else if (action === 'copyfocuedtext') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText' }
+            , function (result) {
+                localStorage.clipboardData = result[0];
+            });
+
+    } else if (action === 'clickfocusedelement') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' });
+
+    } else if (action === 'pastinfocusedelement') {
+
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
+
+    } else {
+        return false;
+    }
+    return true;
+
+
+    // possible to implement
+
+    
     // if (action === 'nexttab') {
     //     selectTab('next')
     // }  else if (action === 'firsttab') {
@@ -82,22 +151,14 @@ let handleAction = (action, count = {}) => {
     //     selectTab('last')
     // } else 
 
-    if (action === 'newtab') {
-        chrome.tabs.create({})
-    } else if (action === 'prevtab') {
-        selectTab('previous')
-    }
+
     // else if (action === 'reopentab') {
     //     chrome.sessions.getRecentlyClosed({ maxResults: 1 }, function (sessions) {
     //         let closedTab = sessions[0]
     //         chrome.sessions.restore(closedTab.sessionId)
     //     })
     // } 
-    else if (action === 'closetab') {
-        chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
-            chrome.tabs.remove(tab[0].id)
-        })
-    }
+
 
     // else if (action === 'clonetab') {
     //     chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
@@ -144,12 +205,7 @@ let handleAction = (action, count = {}) => {
     //         chrome.tabs.update(tab[0].id, { muted: toggle })
     //     })
     // } 
-    else if (action === 'copyurl') {
-        chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
-            copyToClipboard(tab[0].url);
-            localStorage.clipboardData = tab[0].url;
-        })
-    }
+
     // else if (action === 'movetableft') {
     //     chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
     //         if (tab[0].index > 0) {
@@ -162,30 +218,7 @@ let handleAction = (action, count = {}) => {
     //     })
     // } 
 
-    else if (action === 'gototab') {
-        var clipboardData = localStorage.clipboardData;
 
-        chrome.tabs.create({ url: clipboardData });
-        // let createNewTab = () => {
-        //     chrome.tabs.create({ url: clipboardData })
-        // }
-        // if (request.matchurl) {
-        //     let queryOption = { url: request.matchurl }
-        //     if (request.currentWindow) {
-        //         queryOption.currentWindow = true
-        //     }
-        //     chrome.tabs.query(queryOption, function (tabs) {
-        //         if (tabs.length > 0) {
-        //             chrome.tabs.update(tabs[0].id, { active: true })
-        //             chrome.windows.update(tabs[0].windowId, { focused: true })
-        //         } else {
-        //             createNewTab()
-        //         }
-        //     })
-        // } else {
-        //    createNewTab()
-        //}
-    }
     // else if (action === 'gototabbyindex') {
     //     if (request.matchindex) {
     //         selectTab(request.matchindex)
@@ -199,13 +232,7 @@ let handleAction = (action, count = {}) => {
     //         chrome.windows.remove(tab[0].windowId)
     //     })
     // } 
-    else if (action === 'back') {
-        chrome.tabs.executeScript(null, { 'code': 'window.history.back()' })
-    } else if (action === 'forward') {
-        chrome.tabs.executeScript(null, { 'code': 'window.history.forward()' })
-    } else if (action === 'reload') {
-        chrome.tabs.executeScript(null, { 'code': 'window.location.reload()' })
-    }
+
 
     // else if (action === 'top') {
     //     chrome.tabs.executeScript(null, { 'code': 'window.scrollTo(0, 0)' })
@@ -213,34 +240,5 @@ let handleAction = (action, count = {}) => {
     //     chrome.tabs.executeScript(null, { 'code': 'window.scrollTo(0, document.body.scrollHeight)' })
     // } 
 
-    else if (action === 'tab') {
 
-        var injectCode =
-            'var element = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
-            'element.css({"border" : "2px solid red"});' +
-            'element.focus();';
-
-        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-            chrome.tabs.executeScript(null, { 'code': injectCode });
-        });
-
-    } else if (action === 'copyfocuedtext') {
-
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText' }
-            , function (result) {
-                localStorage.clipboardData = result[0];
-            });
-
-    } else if (action === 'clickfocusedelement') {
-
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' });
-
-    } else if (action === 'pastinfocusedelement') {
-
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
-
-    } else {
-        return false
-    }
-    return true
 }

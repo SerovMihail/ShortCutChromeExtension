@@ -1,40 +1,6 @@
-// $('.execute-flow').on('click', function () {
-
-//     // chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-//     //     chrome.tabs.executeScript(null, { file: 'start/scripts/injectModules/inject.js' });
-//     // });
-
-//     var settings = {
-//         keys: [{
-//             action: 'previousTab',
-//             count: 1,
-//             sekDelay: 1,
-//             index: 1
-//         }]
-//     };
-
-//     localStorage.shortkeys = JSON.stringify(settings);
-
-
-//     chrome.runtime.sendMessage({ action: 'getKeys', url: document.URL }, function (response) {
-//         // if (response) {
-//         //     Shortkeys.keys = response
-//         //     if (Shortkeys.keys.length > 0) {
-//         //         Shortkeys.keys.forEach((key) => {
-//         //             Shortkeys.activateKey(key)
-//         //         })
-//         //     }
-//         // }
-//         console.log(response);
-//     })
-// });
-
-//var app = angular.module('ShortcutsFlow', ['ui.select']);
 var app = angular.module('ShortcutsFlow', []);
 
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
-
-
 
     $scope.typesOfShortcut = [
         { 'id': 1, 'group': 'Location', 'name': 'back', 'action': 'back' },
@@ -63,6 +29,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         }
 
     }
+
     init();
 
     // work with flows
@@ -116,7 +83,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         });
 
         localStorage.flows = JSON.stringify($scope.data);
-    }    
+    }
 
     // execute
 
@@ -124,52 +91,18 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
         localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
 
-
-
         chrome.tabs.getSelected(null, function (tab) {
+
             if (new RegExp("^(http|https)://").test(tab.url)) {
 
-                chrome.runtime.sendMessage({ action: 'getKeys', flowIndex: flowIndex }, function (response) {
-                    // if (response) {
-                    //     Shortkeys.keys = response
-                    //     if (Shortkeys.keys.length > 0) {
-                    //         Shortkeys.keys.forEach((key) => {
-                    //             Shortkeys.activateKey(key)
-                    //         })
-                    //     }
-                    // }
+                chrome.runtime.sendMessage({ action: 'executeFlow', flowIndex: flowIndex }, function (response) {
+                    
                     console.log(response);
-                })
+                });
             } else {
                 $scope.data.flows[flowIndex].error = "Unsupported active tab. Please change your location";
-                $scope.$applyAsync();                
+                $scope.$applyAsync();
             }
         });
-
-
-
-
-
-
-        
     }
 }]);
-
-$('.shortcut-add-new').on('click', function () {
-    var prevElemIndexString = $(this).prev().attr('index');
-
-    if (!prevElemIndexString)
-        return;
-
-    var prevElemIndex = parseInt(prevElemIndexString);
-
-    var settings = JSON.parse(localStorage.shortkeys);
-
-    settings.keys.push({
-        action: 'back',
-        count: 1,
-        sekDelay: 1,
-        index: prevElemIndex + 1
-    });
-});
-

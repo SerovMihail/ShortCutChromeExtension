@@ -53,6 +53,28 @@
 
                 <div class="item-body">
                     <ol class="shortcuts-list">
+                        <!-- <li ng-repeat="shortcut in flow.shortcuts track by $index" class="shortcut-item shortcut-exist mb-3">
+
+                            <button type="button" class="remove-shortcut" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
+
+                            <table class="table table-sm" style='margin-bottom: 0;'>
+                                <thead>
+                                    <tr>
+                                        <th style='border-top: 0; font-weight: 500; width: 60%;' scope="col">Action</th>
+                                        <th style='border-top: 0; font-weight: 500;' scope="col">Count</th>
+                                        <th style='border-top: 0; font-weight: 500;' scope="col">Delay</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+
+                                        <td ng-bind="shortcut.name"></td>
+                                        <td ng-bind="shortcut.count"></td>
+                                        <td ng-bind="shortcut.delay"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li> -->
                         <li ng-repeat="shortcut in flow.shortcuts track by $index" class="shortcut-item shortcut-exist mb-3">
 
                             <button type="button" class="remove-shortcut" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
