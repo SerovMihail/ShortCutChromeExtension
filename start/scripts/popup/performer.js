@@ -3,14 +3,14 @@ var app = angular.module('ShortcutsFlow', []);
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.typesOfShortcut = [
-        { 'id': 1, 'group': 'Location', 'name': 'back', 'action': 'back' },
-        { 'id': 2, 'group': 'Location', 'name': 'forward', 'action': 'forward' },
-        { 'id': 3, 'group': 'Location', 'name': 'reload', 'action': 'reload' },
-        { 'id': 4, 'group': 'Location', 'name': 'copy current tab url', 'action': 'copyurl' },
-        { 'id': 5, 'group': 'Tabs', 'name': 'new tab', 'action': 'newtab' },
-        { 'id': 6, 'group': 'Tabs', 'name': 'close tab', 'action': 'closetab' },
-        { 'id': 7, 'group': 'Tabs', 'name': 'previous tab', 'action': 'prevtab' },
-        { 'id': 8, 'group': 'Tabs', 'name': 'new tab using buffer', 'action': 'gototab' },
+        { 'id': 1, 'group': 'Location', 'name': 'Back', 'action': 'back' },
+        { 'id': 2, 'group': 'Location', 'name': 'Forward', 'action': 'forward' },
+        { 'id': 3, 'group': 'Location', 'name': 'Reload', 'action': 'reload' },
+        { 'id': 4, 'group': 'Location', 'name': 'Copy current tab url', 'action': 'copyurl' },
+        { 'id': 5, 'group': 'Tabs', 'name': 'New tab', 'action': 'newtab' },
+        { 'id': 6, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
+        { 'id': 7, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
+        { 'id': 8, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
         { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
         { 'id': 10, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 11, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },

@@ -39,12 +39,16 @@
         <div class="flows" ng-if='data.flows.length > 0'>
             <div class="flow-item mb-3" ng-repeat="flow in data.flows track by $index">
 
-
-
                 <div class="item-header">
-                    <div class="item-name" ng-bind="flow.name"></div>
-                    <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
-                    <button type="button" class="remove-flow" ng-click='removeFlow(flow.index)' title="Remove flow">x</button>
+                    <div class="left-side">
+                            <div class="item-name" ng-bind="flow.name"></div>
+                            <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
+                    </div>
+                    <div class="right-side">
+                            <button type="button" class="btn btn-outline-danger btn-sm" style="width: 30px;" ng-click='removeFlow(flow.index)' title="Remove flow">x</button>
+                    </div>
+                    
+                    
                 </div>
 
                 <div ng-show='flow.error'>
@@ -52,8 +56,65 @@
                 </div>
 
                 <div class="item-body">
-                    <ol class="shortcuts-list">
-                        <!-- <li ng-repeat="shortcut in flow.shortcuts track by $index" class="shortcut-item shortcut-exist mb-3">
+
+                    <table class="table table-sm" style='margin-bottom: 0;'>
+                        <thead>
+                            <tr>
+                                <th style='border-top: 0; font-weight: 500; width: 60%;' scope="col" title="Short name of action">Action</th>
+                                <th style='border-top: 0; font-weight: 500;' scope="col" title='How many times it will be repeated'>Count</th>
+                                <th style='border-top: 0; font-weight: 500;' scope="col" title="in sekonds">Delay</th>
+                                <th style='border-top: 0; font-weight: 500;' scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="shortcut in flow.shortcuts track by $index">
+
+                                <td ng-bind="shortcut.name"></td>
+                                <td ng-bind="shortcut.count"></td>
+                                <td ng-bind="shortcut.delay"></td>
+                                <td>
+                                    <button type="button"  class="btn btn-outline-danger btn-sm btn-block" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <form class="mt-3" ng-submit="createNewShortcut(flow, newShortcut.type, newShortcut.count, newShortcut.delay)">
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">Shortcut type</label>
+                            </div>
+                            <select ng-model="newShortcut.type" class="form-control" ng-options="type.name group by type.group for type in typesOfShortcut">
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6" ng-show='newShortcut.type.action == "tab"'>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Count</span>
+                                    </div>
+                                    <input type="number" ng-model="newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Delay (sek)</span>
+                                    </div>
+                                    <input type="number" ng-model="newShortcut.delay" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <button type="submit" ng-class="{'btn-block' : newShortcut.type.action != 'tab', 'mt-3' : newShortcut.type.action == 'tab'}"
+                                    class="btn btn-success btn-sm">Create shortcut</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- <ol class="shortcuts-list"> -->
+                    <!-- <li ng-repeat="shortcut in flow.shortcuts track by $index" class="shortcut-item shortcut-exist mb-3">
 
                             <button type="button" class="remove-shortcut" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
 
@@ -75,67 +136,21 @@
                                 </tbody>
                             </table>
                         </li> -->
-                        <li ng-repeat="shortcut in flow.shortcuts track by $index" class="shortcut-item shortcut-exist mb-3">
+                    <!-- <li class="shortcut-item shortcut-exist mb-3">
 
                             <button type="button" class="remove-shortcut" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
 
-                            <table class="table table-sm" style='margin-bottom: 0;'>
-                                <thead>
-                                    <tr>
-                                        <th style='border-top: 0; font-weight: 500; width: 60%;' scope="col">Action</th>
-                                        <th style='border-top: 0; font-weight: 500;' scope="col">Count</th>
-                                        <th style='border-top: 0; font-weight: 500;' scope="col">Delay</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
 
-                                        <td ng-bind="shortcut.name"></td>
-                                        <td ng-bind="shortcut.count"></td>
-                                        <td ng-bind="shortcut.delay"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </li>
-                        <!-- exist shortcuts will be here -->
+                        
                         <li class="shortcut-item shortcut-add-new">
 
-                            <form ng-submit="createNewShortcut(flow, newShortcut.type, newShortcut.count, newShortcut.delay)">
-                                <div class="input-group input-group-sm mb-3">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text">Shortcut type</label>
-                                    </div>
-                                    <select ng-model="newShortcut.type" class="form-control" ng-options="type.name group by type.group for type in typesOfShortcut">
-                                    </select>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6" ng-show='newShortcut.type.action == "tab"'>
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">Count</span>
-                                            </div>
-                                            <input type="number" ng-model="newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">Delay (sek)</span>
-                                            </div>
-                                            <input type="number" ng-model="newShortcut.delay" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-6">
-                                        <button type="submit" ng-class="{'btn-block' : newShortcut.type.action != 'tab', 'mt-3' : newShortcut.type.action == 'tab'}"
-                                            class="btn btn-success btn-sm">Create shortcut</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </li>
-                    </ol>
+                            
+                        </li> -->
+                    <!-- </ol> -->
                 </div>
+
+               
             </div>
         </div>
     </div>
