@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
         setTimeout(() => {
             handleAction(el.action, el.count, el.selector);
-        }, el.delay * index * 1000);
+        }, index * 1000);
 
     });
 

@@ -11,22 +11,26 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 6, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
         { 'id': 7, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
         { 'id': 8, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
-        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab', 'additionalInput' : true },
+        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
         { 'id': 10, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 11, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
         { 'id': 12, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' },
-        { 'id': 13, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector', 'additionalInput' : true  }
-    ]
+        { 'id': 13, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
+    ];
 
-    $scope.data = {
-        flows: []
-    }
+    $scope.temp = {};
 
     function init() {
+
         if (!localStorage.flows) {
-            saveInLocalStorage('flows', $scope.data);           
+
+            $scope.vm = {
+                flows: []
+            }
+
+            saveInLocalStorage('flows', $scope.vm);
         } else {
-            $scope.data = getFromLocalStorage('flows');            
+            $scope.vm = getFromLocalStorage('flows');
         }
 
     }
@@ -36,49 +40,45 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     // work with flows
 
     $scope.createNewFlow = function () {
-        $scope.data.flows.push({
-            index: $scope.data.flows.length + 1,
+        $scope.vm.flows.push({
+            index: $scope.vm.flows.length + 1,
             name: $scope.newFlowName,
             shortcuts: []
         });
 
         $scope.newFlowName = "";
 
-        saveInLocalStorage('flows', $scope.data);   
+        saveInLocalStorage('flows', $scope.vm);
     }
 
     $scope.removeFlow = function (index) {
-        
-        $scope.data.flows = $scope.data.flows.filter(function (e) {
+
+        $scope.vm.flows = $scope.vm.flows.filter(function (e) {
             return e.index != index;
         });
 
-        saveInLocalStorage('flows', $scope.data);   
+        saveInLocalStorage('flows', $scope.vm);
     }
 
     // shortcuts
 
-    $scope.createNewShortcut = function (flow, type, count, delay, selector) {
+    $scope.createNewShortcut = function (flow) {
 
-        // if (!count)
-        //     count = 1;
-
-        // if (!delay)
-        //     delay = 1;
+       
+        var shortcutInfo = $scope.temp.newShortcut;
 
         flow.shortcuts.push({
-            action: type.action,
-            name: type.name,
             index: flow.shortcuts.length + 1,
-            count: count,
-            delay: delay,
-            selector: selector,
-            additionalInput: count || selector ? true : false
+            action: shortcutInfo.type.action,
+            name: shortcutInfo.type.name,
+            count: shortcutInfo.count ? shortcutInfo.count : null,
+            delay: shortcutInfo.delay ? shortcutInfo.delay : null,
+            selector: shortcutInfo.selector ? shortcutInfo.selector : null            
         });
 
         type = "";
 
-        saveInLocalStorage('flows', $scope.data);   
+        saveInLocalStorage('flows', $scope.vm);
     }
 
     $scope.removeShortcut = function (flow, shortcutIndex) {
@@ -86,25 +86,25 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             return e.index != shortcutIndex;
         });
 
-        saveInLocalStorage('flows', $scope.data);   
+        saveInLocalStorage('flows', $scope.vm);
     }
 
     // execute
 
     $scope.executeFlow = function (flowIndex) {
 
-        localStorage.currentFlow = JSON.stringify($scope.data.flows[flowIndex].shortcuts);
+        localStorage.currentFlow = JSON.stringify($scope.vm.flows[flowIndex].shortcuts);
 
         chrome.tabs.getSelected(null, function (tab) {
 
             if (new RegExp("^(http|https)://").test(tab.url)) {
 
                 chrome.runtime.sendMessage({ action: 'executeFlow', flowIndex: flowIndex }, function (response) {
-                    
+
                     console.log(response);
                 });
             } else {
-                $scope.data.flows[flowIndex].error = "Unsupported active tab. Please change your location";
+                $scope.vm.flows[flowIndex].error = "Unsupported active tab. Please change your location";
                 $scope.$applyAsync();
             }
         });
@@ -115,6 +115,6 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     }
 
     function getFromLocalStorage(key) {
-        return localStorage.getItem(key);
+        return JSON.parse(localStorage.getItem(key));
     }
 }]);
