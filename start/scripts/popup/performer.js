@@ -11,10 +11,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 6, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
         { 'id': 7, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
         { 'id': 8, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
-        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
+        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab', 'additionalInput' : true },
         { 'id': 10, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 11, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
-        { 'id': 12, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' }
+        { 'id': 12, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' },
+        { 'id': 13, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector', 'additionalInput' : true  }
     ]
 
     $scope.data = {
@@ -23,9 +24,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     function init() {
         if (!localStorage.flows) {
-            localStorage.flows = JSON.stringify($scope.data);
+            saveInLocalStorage('flows', $scope.data);           
         } else {
-            $scope.data = JSON.parse(localStorage.flows)
+            $scope.data = getFromLocalStorage('flows');            
         }
 
     }
@@ -43,38 +44,41 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
         $scope.newFlowName = "";
 
-        localStorage.flows = JSON.stringify($scope.data);
+        saveInLocalStorage('flows', $scope.data);   
     }
 
     $scope.removeFlow = function (index) {
+        
         $scope.data.flows = $scope.data.flows.filter(function (e) {
             return e.index != index;
         });
 
-        localStorage.flows = JSON.stringify($scope.data);
+        saveInLocalStorage('flows', $scope.data);   
     }
 
     // shortcuts
 
-    $scope.createNewShortcut = function (flow, type, count, delay) {
+    $scope.createNewShortcut = function (flow, type, count, delay, selector) {
 
-        if (!count)
-            count = 1;
+        // if (!count)
+        //     count = 1;
 
-        if (!delay)
-            delay = 1;
+        // if (!delay)
+        //     delay = 1;
 
         flow.shortcuts.push({
             action: type.action,
             name: type.name,
             index: flow.shortcuts.length + 1,
             count: count,
-            delay: delay
+            delay: delay,
+            selector: selector,
+            additionalInput: count || selector ? true : false
         });
 
         type = "";
 
-        localStorage.flows = JSON.stringify($scope.data);
+        saveInLocalStorage('flows', $scope.data);   
     }
 
     $scope.removeShortcut = function (flow, shortcutIndex) {
@@ -82,7 +86,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             return e.index != shortcutIndex;
         });
 
-        localStorage.flows = JSON.stringify($scope.data);
+        saveInLocalStorage('flows', $scope.data);   
     }
 
     // execute
@@ -104,5 +108,13 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
                 $scope.$applyAsync();
             }
         });
+    }
+
+    function saveInLocalStorage(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function getFromLocalStorage(key) {
+        return localStorage.getItem(key);
     }
 }]);

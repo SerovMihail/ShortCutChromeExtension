@@ -41,14 +41,15 @@
 
                 <div class="item-header">
                     <div class="left-side">
-                            <div class="item-name" ng-bind="flow.name"></div>
-                            <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
+                        <div class="item-name" ng-bind="flow.name"></div>
+                        <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
                     </div>
                     <div class="right-side">
-                            <button type="button" class="btn btn-outline-danger btn-sm" style="width: 30px;" ng-click='removeFlow(flow.index)' title="Remove flow">x</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" style="width: 30px; padding-top: 2px;" ng-click='removeFlow(flow.index)'
+                            title="Remove flow">x</button>
                     </div>
-                    
-                    
+
+
                 </div>
 
                 <div ng-show='flow.error'>
@@ -61,25 +62,32 @@
                         <thead>
                             <tr>
                                 <th style='border-top: 0; font-weight: 500; width: 60%;' scope="col" title="Short name of action">Action</th>
-                                <th style='border-top: 0; font-weight: 500;' scope="col" title='How many times it will be repeated'>Count</th>
-                                <th style='border-top: 0; font-weight: 500;' scope="col" title="in sekonds">Delay</th>
+                                <th style='border-top: 0; font-weight: 500;' scope="col" title='Count for tabs, Selector for element'>Info</th>
+                                <!-- <th style='border-top: 0; font-weight: 500;' scope="col" title="in sekonds">Delay</th> -->
                                 <th style='border-top: 0; font-weight: 500;' scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="shortcut in flow.shortcuts track by $index">
+                            <tr ng-show="flow.shortcuts.length === 0">
+                                <td colspan="3">Shortcut list is empty. Create new shortcut</td>
+                            </tr>
+
+                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index">
 
                                 <td ng-bind="shortcut.name"></td>
-                                <td ng-bind="shortcut.count"></td>
-                                <td ng-bind="shortcut.delay"></td>
+                                <td ng-if="!shortcut.additionalInput"></td>
+                                <td ng-if="shortcut.action == 'tab'" ng-bind="shortcut.count"></td>
+                                <td ng-if="shortcut.action == 'selectelementusingselector'" ng-bind="shortcut.selector"></td>
+                                <!-- <td ng-bind="shortcut.delay"></td> -->
                                 <td>
-                                    <button type="button"  class="btn btn-outline-danger btn-sm btn-block" ng-click='removeShortcut(flow, shortcut.index)' title="Remove shortcut">x</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-block" style='padding-top: 0px;' ng-click='removeShortcut(flow, shortcut.index)'
+                                        title="Remove shortcut">x</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <form class="mt-3" ng-submit="createNewShortcut(flow, newShortcut.type, newShortcut.count, newShortcut.delay)">
+                    <form class="mt-3" ng-submit="createNewShortcut(flow, newShortcut.type, newShortcut.count, newShortcut.delay, newShortcut.selector)">
                         <div class="input-group input-group-sm mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text">Shortcut type</label>
@@ -97,18 +105,25 @@
                                     <input type="number" ng-model="newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6" ng-show='newShortcut.type.action == "selectelementusingselector"'>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Selector</span>
+                                    </div>
+                                    <input type="text" ng-model="newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+                            <!-- <div class="col-6">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Delay (sek)</span>
                                     </div>
                                     <input type="number" ng-model="newShortcut.delay" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="col-6">
-                                <button type="submit" ng-class="{'btn-block' : newShortcut.type.action != 'tab', 'mt-3' : newShortcut.type.action == 'tab'}"
-                                    class="btn btn-success btn-sm">Create shortcut</button>
+                                <button type="submit" ng-class="{'btn-block' : newShortcut.type.id == 9 || newShortcut.type.id == 13 }" class="btn btn-success btn-sm">Create shortcut</button>
                             </div>
                         </div>
                     </form>
@@ -150,7 +165,7 @@
                     <!-- </ol> -->
                 </div>
 
-               
+
             </div>
         </div>
     </div>

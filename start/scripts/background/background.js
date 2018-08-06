@@ -55,7 +55,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     settings.forEach(function (el, index) {
 
         setTimeout(() => {
-            handleAction(el.action, el.count);
+            handleAction(el.action, el.count, el.selector);
         }, el.delay * index * 1000);
 
     });
@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
 
-let handleAction = (action, count = {}) => {
+let handleAction = (action, count, selector = {}) => {
 
     if (action === 'newtab') {
         chrome.tabs.create({})
@@ -133,6 +133,10 @@ let handleAction = (action, count = {}) => {
     } else if (action === 'pastinfocusedelement') {
 
         chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
+
+    } else if (action === 'selectelementusingselector') {
+
+        chrome.tabs.executeScript(null, { 'code': 'var elem = document.querySelector("' + selector + '"); elem.style.background = "red"; elem.focus();' });
 
     } else {
         return false;
