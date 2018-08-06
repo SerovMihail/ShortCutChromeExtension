@@ -45,31 +45,31 @@ let selectTab = (direction) => {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    const action = request.action
-    if (action === 'executeFlow') {
+
+    if (request.action === 'executeFlow') {
 
         var settings = JSON.parse(localStorage.currentFlow)
+        settings.forEach(function (el, index) {
 
+            setTimeout(() => {
+                handleAction(el.action, el.count, el.selector, el.url);
+            }, index * 2000);
+
+        });
     }
-
-    settings.forEach(function (el, index) {
-
-        setTimeout(() => {
-            handleAction(el.action, el.count, el.selector);
-        }, index * 1000);
-
-    });
 
 });
 
 
 
-let handleAction = (action, count, selector = {}) => {
+let handleAction = (action, count, selector, url = {}) => {
 
     if (action === 'newtab') {
         chrome.tabs.create({})
     } else if (action === 'prevtab') {
         selectTab('previous')
+    } else if (action === 'nexttab') {
+        selectTab('next')
     } else if (action === 'closetab') {
         chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
             chrome.tabs.remove(tab[0].id)
@@ -111,17 +111,22 @@ let handleAction = (action, count, selector = {}) => {
     } else if (action === 'tab') {
 
         var injectCode =
-            'var element = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
-            'element.css({"border" : "2px solid red"});' +
-            'element.focus();';
+            'var elem = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
+
+            'elem.css({"border" : "2px solid red"});' +
+            'elem.focus();';
 
         chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
             chrome.tabs.executeScript(null, { 'code': injectCode });
         });
 
+    } else if (action === 'opentabbyurl') {
+
+        chrome.tabs.create({ url: url });
+
     } else if (action === 'copyfocuedtext') {
 
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText' }
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText ? document.activeElement.innerText : document.activeElement.value' }
             , function (result) {
                 localStorage.clipboardData = result[0];
             });
@@ -132,11 +137,15 @@ let handleAction = (action, count, selector = {}) => {
 
     } else if (action === 'pastinfocusedelement') {
 
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
+        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+            chrome.tabs.executeScript(null, { 'code': "var elem = $('#fn-sendRecipient'); elem.click(); elem.val('serov.mikhail.job@gmail.com'); elem.trigger('change') .trigger('keyup');" });
+        });
+
+        //chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
 
     } else if (action === 'selectelementusingselector') {
 
-        chrome.tabs.executeScript(null, { 'code': 'var elem = document.querySelector("' + selector + '"); elem.style.background = "red"; elem.focus();' });
+        chrome.tabs.executeScript(null, { 'code': 'var elem = document.querySelector("' + selector + '"); elem.style.background = "red"; elem.tabIndex = 1; elem.focus();' });
 
     } else {
         return false;
@@ -146,7 +155,7 @@ let handleAction = (action, count, selector = {}) => {
 
     // possible to implement
 
-    
+
     // if (action === 'nexttab') {
     //     selectTab('next')
     // }  else if (action === 'firsttab') {

@@ -10,12 +10,14 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 5, 'group': 'Tabs', 'name': 'New tab', 'action': 'newtab' },
         { 'id': 6, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
         { 'id': 7, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
-        { 'id': 8, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
-        { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
-        { 'id': 10, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
-        { 'id': 11, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
-        { 'id': 12, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' },
-        { 'id': 13, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
+        { 'id': 8, 'group': 'Tabs', 'name': 'Next tab', 'action': 'nexttab' },
+        { 'id': 9, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
+        { 'id': 10, 'group': 'Tabs', 'name': 'New tab using input', 'action': 'opentabbyurl' },
+        // { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
+        { 'id': 11, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
+        { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
+        { 'id': 13, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' },
+        { 'id': 14, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
     ];
 
     $scope.temp = {};
@@ -63,7 +65,6 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     // shortcuts
 
     $scope.createNewShortcut = function (flow) {
-
        
         var shortcutInfo = $scope.temp.newShortcut;
 
@@ -73,15 +74,15 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             name: shortcutInfo.type.name,
             count: shortcutInfo.count ? shortcutInfo.count : null,
             delay: shortcutInfo.delay ? shortcutInfo.delay : null,
-            selector: shortcutInfo.selector ? shortcutInfo.selector : null            
-        });
-
-        type = "";
+            selector: shortcutInfo.selector ? shortcutInfo.selector : null  ,          
+            url: shortcutInfo.url ? shortcutInfo.url : null            
+        });        
 
         saveInLocalStorage('flows', $scope.vm);
     }
 
     $scope.removeShortcut = function (flow, shortcutIndex) {
+
         flow.shortcuts = flow.shortcuts.filter(function (e) {
             return e.index != shortcutIndex;
         });
@@ -104,9 +105,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
                     console.log(response);
                 });
             } else {
+
                 $scope.vm.flows[flowIndex].error = "Unsupported active tab. Please change your location";
                 $scope.$applyAsync();
             }
+
         });
     }
 

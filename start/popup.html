@@ -61,10 +61,10 @@
                     <table class="table table-sm" style='margin-bottom: 0;'>
                         <thead>
                             <tr>
-                                <th style='border-top: 0; font-weight: 500; width: 60%;' scope="col" title="Short name of action">Action</th>
+                                <th style='border-top: 0; font-weight: 500; width: 50%;' scope="col" title="Short name of action">Action</th>
                                 <th style='border-top: 0; font-weight: 500;' scope="col" title='Count for tabs, Selector for element'>Info</th>
                                 
-                                <th style='border-top: 0; font-weight: 500;' scope="col"></th>
+                                <th style='border-top: 0; font-weight: 500;width: 10%;' scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,6 +78,8 @@
                                 
                                 <td ng-if="shortcut.action == 'tab'" ng-bind="shortcut.count"></td>
                                 <td ng-if="shortcut.action == 'selectelementusingselector'" ng-bind="shortcut.selector"></td>
+                                <td ng-if="shortcut.action == 'opentabbyurl'" ng-bind="shortcut.url.substring(0, 20)" title="{{shortcut.url}}"></td>
+                                <td ng-if="shortcut.action != 'selectelementusingselector' && shortcut.action != 'tab'  && shortcut.action != 'opentabbyurl'">-</td>
                                 
                                 <td>
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-block" style='padding-top: 0px;' ng-click='removeShortcut(flow, shortcut.index)'
@@ -92,25 +94,33 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text">Shortcut type</label>
                             </div>
-                            <select class="form-control" ng-model="temp.newShortcut.type" ng-options="type.name group by type.group for type in typesOfShortcut track by type">
+                            <select class="form-control" ng-model="temp.newShortcut.type" ng-options="type.name group by type.group for type in typesOfShortcut track by type.id">
                             </select>
                         </div>
 
                         <div class="row">
-                            <div class="col-6" ng-show='temp.newShortcut.type.action == "tab"'>
+                            <div class="col-6" ng-if='temp.newShortcut.type.action == "tab"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Count</span>
                                     </div>
-                                    <input type="number" ng-model="temp.newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="number" required ng-model="temp.newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6" ng-show='temp.newShortcut.type.action == "selectelementusingselector"'>
+                            <div class="col-6" ng-if='temp.newShortcut.type.action == "selectelementusingselector"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Selector</span>
                                     </div>
-                                    <input type="text" ng-model="temp.newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" required ng-model="temp.newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+                            <div class="col-6" ng-if='temp.newShortcut.type.action == "opentabbyurl"'>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
+                                    </div>
+                                    <input type="text" required ng-model="temp.newShortcut.url" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
 
