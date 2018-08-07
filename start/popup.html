@@ -34,15 +34,13 @@
             </div>
         </div>
 
-
-
         <div class="flows" ng-if='vm.flows.length > 0'>
             <div class="flow-item mb-3" ng-repeat="flow in vm.flows track by $index">
 
                 <div class="item-header">
                     <div class="left-side">
                         <span class="arrow-wrap" title='Toggle flow visible' ng-click='toggleFlowVisible(flow)'>
-                            <i class="arrow" ng-class="{'up' : flow.bodyVisible, 'down': !flow.bodyVisible}" ></i>
+                            <i class="arrow" ng-class="{'up' : flow.bodyVisible, 'down': !flow.bodyVisible}"></i>
                         </span>
                         <div class="item-name" ng-bind="flow.name"></div>
                         <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
@@ -51,8 +49,6 @@
                         <button type="button" class="btn btn-outline-danger btn-sm" style="width: 30px; padding-top: 2px;" ng-click='removeFlow(flow.index)'
                             title="Remove flow">x</button>
                     </div>
-
-
                 </div>
 
                 <div ng-show='flow.error'>
@@ -60,7 +56,6 @@
                 </div>
 
                 <div class="item-body" ng-hide='!flow.bodyVisible'>
-
                     <table class="table table-sm" style='margin-bottom: 0;'>
                         <thead>
                             <tr>
@@ -134,12 +129,12 @@
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> <!-- item-body -->
 
 
-            </div>
-        </div>
-    </div>
+            </div> <!-- flow-item -->
+        </div> <!-- flows -->
+     </div> <!-- wrapper -->
     <script src="scripts/popup/performer.js"></script>
 
 </body>
