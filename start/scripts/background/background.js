@@ -10,10 +10,11 @@ let copyToClipboard = (text) => {
     document.body.removeChild(copyDiv)
 }
 
-let selectTab = (direction) => {
+let selectTab = (direction, callback) => {
     chrome.tabs.query({ currentWindow: true }, (tabs) => {
         if (tabs.length <= 1) {
-            return
+            callback();
+            // return;
         }
         chrome.tabs.query({ currentWindow: true, active: true }, (currentTabInArray) => {
             let currentTab = currentTabInArray[0]
@@ -39,7 +40,7 @@ let selectTab = (direction) => {
                         return
                     }
             }
-            chrome.tabs.update(toSelect.id, { active: true })
+            chrome.tabs.update(toSelect.id, { active: true }, callback)
         })
     })
 }
@@ -48,41 +49,68 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     if (request.action === 'executeFlow') {
 
-        var settings = JSON.parse(localStorage.currentFlow)
-        settings.forEach(function (el, index) {
+        var settings = JSON.parse(localStorage.currentFlow);
 
-            setTimeout(() => {
-                handleAction(el.action, el.count, el.selector, el.url);
-            }, index * 2000);
+        var index = 0;
 
-        });
+        delay_loop();
+
+        function delay_loop() {
+            setTimeout(function () {
+
+                el = settings[index];
+
+                handleAction(el.action, el.count, el.selector, el.url, function () {
+
+                    index = ++index;
+                    if (index < settings.length) {                        
+                        delay_loop();
+                    }
+                });
+
+            }, 1500);
+
+        }
+
+
+        // settings.forEach(function (el, index) {
+
+        //     setTimeout(() => {
+        //         handleAction(el.action, el.count, el.selector, el.url);
+        //     }, index * 2000);
+
+        // });
     }
 
 });
 
 
 
-let handleAction = (action, count, selector, url = {}) => {
+let handleAction = (action, count, selector, url, callback = {}) => {
 
     if (action === 'newtab') {
-        chrome.tabs.create({})
+        chrome.tabs.create({}, function () {
+            callback();
+        });
     } else if (action === 'prevtab') {
-        selectTab('previous')
+        selectTab('previous', callback)
     } else if (action === 'nexttab') {
-        selectTab('next')
+        selectTab('next', callback)
     } else if (action === 'closetab') {
         chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
-            chrome.tabs.remove(tab[0].id)
+            chrome.tabs.remove(tab[0].id);
+            callback();
         })
     } else if (action === 'copyurl') {
         chrome.tabs.query({ currentWindow: true, active: true }, (tab) => {
             copyToClipboard(tab[0].url);
             localStorage.clipboardData = tab[0].url;
+            callback();
         })
     } else if (action === 'gototab') {
         var clipboardData = localStorage.clipboardData;
 
-        chrome.tabs.create({ url: clipboardData });
+        chrome.tabs.create({ url: clipboardData }, callback);
         // let createNewTab = () => {
         //     chrome.tabs.create({ url: clipboardData })
         // }
@@ -103,11 +131,17 @@ let handleAction = (action, count, selector, url = {}) => {
         //    createNewTab()
         //}
     } else if (action === 'back') {
-        chrome.tabs.executeScript(null, { 'code': 'window.history.back()' })
+        chrome.tabs.executeScript(null, { 'code': 'window.history.back()' }, function () {
+            callback();
+        })
     } else if (action === 'forward') {
-        chrome.tabs.executeScript(null, { 'code': 'window.history.forward()' })
+        chrome.tabs.executeScript(null, { 'code': 'window.history.forward()' }, function () {
+            callback();
+        })
     } else if (action === 'reload') {
-        chrome.tabs.executeScript(null, { 'code': 'window.location.reload()' })
+        chrome.tabs.executeScript(null, { 'code': 'window.location.reload()' }, function () {
+            callback();
+        })
     } else if (action === 'tab') {
 
         var injectCode =
@@ -117,35 +151,50 @@ let handleAction = (action, count, selector, url = {}) => {
             'elem.focus();';
 
         chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-            chrome.tabs.executeScript(null, { 'code': injectCode });
+            chrome.tabs.executeScript(null, { 'code': injectCode }, function () {
+                callback();
+            });
         });
 
     } else if (action === 'opentabbyurl') {
 
-        chrome.tabs.create({ url: url });
+        chrome.tabs.create({ url: url }, function () {
+            callback();
+        });
 
     } else if (action === 'copyfocuedtext') {
 
         chrome.tabs.executeScript(null, { 'code': 'document.activeElement.innerText ? document.activeElement.innerText : document.activeElement.value' }
             , function (result) {
-                localStorage.clipboardData = result[0];
+                localStorage.clipboardData = result[0].trim();
+                callback();
             });
 
     } else if (action === 'clickfocusedelement') {
 
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' });
+        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' }, function () {
+            callback();
+        });
 
     } else if (action === 'pastinfocusedelement') {
 
-        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-            chrome.tabs.executeScript(null, { 'code': "var elem = $('#fn-sendRecipient'); elem.click(); elem.val('serov.mikhail.job@gmail.com'); elem.trigger('change') .trigger('keyup');" });
-        });
+        // chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+        //     chrome.tabs.executeScript(null, { 'code': "var elem = $('#fn-sendRecipient'); elem.focus();  elem.val('serov.mikhail.job@gmail.com'); elem.trigger('change');" });
+        // });
 
-        //chrome.tabs.executeScript(null, { 'code': 'document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.style.border = "2px solid yellow"' });
+        chrome.tabs.executeScript(null, { 'code': 'var ev = new Event("input", { bubbles: true}); ev.simulated = true; document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.dispatchEvent(ev); document.activeElement.style.border = "2px solid yellow"' }, function () {
+            callback();
+        });
 
     } else if (action === 'selectelementusingselector') {
 
-        chrome.tabs.executeScript(null, { 'code': 'var elem = document.querySelector("' + selector + '"); elem.style.background = "red"; elem.tabIndex = 1; elem.focus();' });
+
+        chrome.tabs.executeScript(null, { code: "var selector = '" + selector + "'; waitForEl(selector,function(){var elem=document.querySelector(selector);elem.style.background='red';elem.tabIndex=1;elem.focus();});function waitForEl(selector,callback){var rowLength=document.querySelectorAll(selector).length;if(rowLength==1){callback();}else{setTimeout(function(){waitForEl(selector,callback);},100);}};" }, function () {
+            callback();
+            // chrome.tabs.executeScript(null, { file: 'start/scripts/injectModules/selectelementusingselector.js' }, function() {
+            //     callback();
+            // });
+        });
 
     } else {
         return false;
