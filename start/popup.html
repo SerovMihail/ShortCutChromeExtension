@@ -41,7 +41,7 @@
 
                 <div class="item-header">
                     <div class="left-side">
-                        <span class="arrow-wrap" title='Toggle flow visible' ng-click='flow.bodyVisible = !flow.bodyVisible'>
+                        <span class="arrow-wrap" title='Toggle flow visible' ng-click='toggleFlowVisible(flow)'>
                             <i class="arrow" ng-class="{'up' : flow.bodyVisible, 'down': !flow.bodyVisible}" ></i>
                         </span>
                         <div class="item-name" ng-bind="flow.name"></div>
@@ -97,39 +97,39 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text">Shortcut type</label>
                             </div>
-                            <select class="form-control" ng-model="temp.newShortcut.type" ng-options="type.name group by type.group for type in typesOfShortcut track by type.id">
+                            <select class="form-control" ng-model="flow.temp.newShortcut.type" ng-options="type.name group by type.group for type in typesOfShortcut track by type.id">
                             </select>
                         </div>
 
                         <div class="row">
-                            <div class="col-6" ng-if='temp.newShortcut.type.action == "tab"'>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "tab"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Count</span>
                                     </div>
-                                    <input type="number" required ng-model="temp.newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="number" required ng-model="flow.temp.newShortcut.count" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6" ng-if='temp.newShortcut.type.action == "selectelementusingselector"'>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "selectelementusingselector"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Selector</span>
                                     </div>
-                                    <input type="text" required ng-model="temp.newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" required ng-model="flow.temp.newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6" ng-if='temp.newShortcut.type.action == "opentabbyurl"'>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "opentabbyurl"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
                                     </div>
-                                    <input type="text" required ng-model="temp.newShortcut.url" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" required ng-model="flow.temp.newShortcut.url" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
 
 
                             <div class="col-6">
-                                <button type="submit" title='toggle flow' ng-class="{'btn-block' : temp.newShortcut.type.id == 9 || temp.newShortcut.type.id == 13 }"
+                                <button type="submit" title='toggle flow' ng-class="{'btn-block' : flow.temp.newShortcut.type.id == 10 || flow.temp.newShortcut.type.id == 14 }"
                                     class="btn btn-success btn-sm">Create shortcut</button>
                             </div>
                         </div>

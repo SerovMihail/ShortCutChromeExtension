@@ -62,11 +62,17 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         saveInLocalStorage('flows', $scope.vm);
     }
 
+    $scope.toggleFlowVisible = function(flow) {
+        flow.bodyVisible = !flow.bodyVisible;
+
+        saveInLocalStorage('flows', $scope.vm);
+    }
+
     // shortcuts
 
     $scope.createNewShortcut = function (flow) {
        
-        var shortcutInfo = $scope.temp.newShortcut;
+        var shortcutInfo = flow.temp.newShortcut;
 
         flow.shortcuts.push({
             index: flow.shortcuts.length + 1,
@@ -76,7 +82,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             delay: shortcutInfo.delay ? shortcutInfo.delay : null,
             selector: shortcutInfo.selector ? shortcutInfo.selector : null  ,          
             url: shortcutInfo.url ? shortcutInfo.url : null            
-        });        
+        });       
+        
+        flow.temp = null;
 
         saveInLocalStorage('flows', $scope.vm);
     }
