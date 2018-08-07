@@ -63,12 +63,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 handleAction(el.action, el.count, el.selector, el.url, function () {
 
                     index = ++index;
-                    if (index < settings.length) {                        
+                    if (index < settings.length) {
                         delay_loop();
                     }
                 });
 
-            }, 1500);
+            }, 1000);
 
         }
 
@@ -144,15 +144,17 @@ let handleAction = (action, count, selector, url, callback = {}) => {
         })
     } else if (action === 'tab') {
 
-        var injectCode =
-            'var elem = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
+        // var injectCode =
+        //     'var elem = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
 
-            'elem.css({"border" : "2px solid red"});' +
-            'elem.focus();';
+        //     'elem.css({"border" : "2px solid red"});' +
+        //     'elem.focus();';
 
-        chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-            chrome.tabs.executeScript(null, { 'code': injectCode }, function () {
-                callback();
+        chrome.tabs.executeScript(null, { 'file': "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+            chrome.tabs.executeScript(null, { 'code': 'var count = ' + count + ';' }, function () {
+                chrome.tabs.executeScript(null, { 'file': 'start/scripts/injectModules/tab.js' }, function () {
+                    callback();
+                });
             });
         });
 
@@ -172,29 +174,40 @@ let handleAction = (action, count, selector, url, callback = {}) => {
 
     } else if (action === 'clickfocusedelement') {
 
-        chrome.tabs.executeScript(null, { 'code': 'document.activeElement.click()' }, function () {
+        
+        chrome.tabs.executeScript(null, {            
+            file: 'start/scripts/injectModules/clickFocusedElement.js'
+        }, function () {
             callback();
         });
+
+
 
     } else if (action === 'pastinfocusedelement') {
 
-        // chrome.tabs.executeScript(null, { file: "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
-        //     chrome.tabs.executeScript(null, { 'code': "var elem = $('#fn-sendRecipient'); elem.focus();  elem.val('serov.mikhail.job@gmail.com'); elem.trigger('change');" });
-        // });
-
-        chrome.tabs.executeScript(null, { 'code': 'var ev = new Event("input", { bubbles: true}); ev.simulated = true; document.activeElement.value = "' + localStorage.clipboardData + '"; document.activeElement.dispatchEvent(ev); document.activeElement.style.border = "2px solid yellow"' }, function () {
-            callback();
+        chrome.tabs.executeScript(null, { 'code': "var clipboardData = '" + localStorage.clipboardData + "';" }, function () {
+            chrome.tabs.executeScript(null, {
+                runAt: 'document_end',
+                file: 'start/scripts/injectModules/pastInFocusedElement.js'
+            }, function () {
+                callback();
+            });
         });
+
+
 
     } else if (action === 'selectelementusingselector') {
 
-
-        chrome.tabs.executeScript(null, { code: "var selector = '" + selector + "'; waitForEl(selector,function(){var elem=document.querySelector(selector);elem.style.background='red';elem.tabIndex=1;elem.focus();});function waitForEl(selector,callback){var rowLength=document.querySelectorAll(selector).length;if(rowLength==1){callback();}else{setTimeout(function(){waitForEl(selector,callback);},100);}};" }, function () {
-            callback();
-            // chrome.tabs.executeScript(null, { file: 'start/scripts/injectModules/selectelementusingselector.js' }, function() {
-            //     callback();
-            // });
+        chrome.tabs.executeScript(null, { 'code': "var selector = '" + selector + "';" }, function () {
+            chrome.tabs.executeScript(null, {
+                runAt: 'document_start',
+                //code: "var selector = '" + selector + "'; waitForEl(selector,function(error){if(error){alert('Problems with flow. Reexecute your flow or change shortcuts')}; [].forEach.call(document.querySelectorAll('[tabindex]'),function(el){el.tabIndex=1}); var elem=document.querySelector(selector);elem.style.background='red';elem.tabIndex=1;elem.focus()});function waitForEl(selector,callback){var rowLength=document.querySelectorAll(selector).length;var watingCounter=0;if(rowLength==1){callback()}else{setTimeout(function(){waitForEl(selector,callback);watingCounter=++watingCounter;if(watingCounter>20){callback('error')}},100)}}"
+                file: "start/scripts/injectModules/selectelEmentUsingSelector.js"
+            }, function () {
+                callback();
+            });
         });
+
 
     } else {
         return false;
