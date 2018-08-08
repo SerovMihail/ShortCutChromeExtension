@@ -74,10 +74,38 @@
 
                                 <td ng-bind="shortcut.name"></td>
 
-                                <td ng-if="shortcut.action == 'tab'" ng-bind="shortcut.count"></td>
-                                <td ng-if="shortcut.action == 'selectelementusingselector'" ng-bind="shortcut.selector"></td>
-                                <td ng-if="shortcut.action == 'opentabbyurl'" ng-bind="shortcut.url.substring(0, 20)" title="{{shortcut.url}}"></td>
-                                <td ng-if="shortcut.action == 'pastusinginput'" ng-bind="shortcut.data"></td>
+                                <td ng-if="shortcut.action == 'tab'">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.count'>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="shortcut.action == 'selectelementusingselector'">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.selector'>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="shortcut.action == 'opentabbyurl'">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.url'>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="shortcut.action == 'pastusinginput'">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.data'>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td ng-if="shortcut.action != 'selectelementusingselector' 
                                         && shortcut.action != 'tab'  
                                         && shortcut.action != 'opentabbyurl'

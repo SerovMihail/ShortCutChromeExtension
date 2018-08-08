@@ -106,6 +106,17 @@
     top: 35%;
 }
 
+.table .input-sm-custom {
+    height: 27px;
+    padding: .25rem 5px;
+}
+
+.btn-sm-custom {
+    height: auto !important;
+    padding: 8px !important;
+    line-height: 0.5 !important;
+}
+
 .arrow-wrap {
     margin-right: 20px;
     cursor: pointer;

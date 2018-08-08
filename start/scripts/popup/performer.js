@@ -100,6 +100,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         saveInLocalStorage('flows', $scope.vm);
     }
 
+    $scope.updateShortcut = function() {
+        
+        saveInLocalStorage('flows', $scope.vm);
+    }
+
     // execute
 
     $scope.executeFlow = function (flowIndex) {
