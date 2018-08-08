@@ -8,15 +8,36 @@
     <!-- Styles reset and main file   -->
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/dnd-list.css">
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- Scripts libs -->
     <script src="scripts/libs/jquery-3.3.1.min.js"></script>
     <script src="scripts/libs/angular.min.js"></script>
+    <script src="scripts/libs/dnd-angular.Directive.js"></script>
 </head>
 
 <body>
     <div class="wrapper" ng-controller="ShortcutsCtrl">
+
+        <ul dnd-list="list.people">
+
+            <li ng-repeat="person in list.people" dnd-draggable="person" dnd-type="person.type" dnd-disable-if="person.type == 'unknown'"
+                dnd-moved="list.people.splice($index, 1)" class="background-{{person.type}}">
+                <dnd-nodrag>
+                    <div dnd-handle class="handle">:::</div>
+                    <div class="name">
+                        <input type="text" ng-model="person.name" class="background-{{person.type}} form-control input-sm">
+                    </div>
+                </dnd-nodrag>
+            </li>
+
+            <li class="dndPlaceholder">
+                Drop any
+                <strong>{{list.allowedTypes.join(' or ')}}</strong> here
+            </li>
+
+        </ul>
 
         <h1 class="main-title">Chrome Shortcut Extension</h1>
         <form class="form-inline" ng-submit="createNewFlow()">
@@ -37,7 +58,7 @@
         <div class="flows" ng-if='vm.flows.length > 0'>
             <div class="flow-item mb-3" ng-repeat="flow in vm.flows track by $index">
 
-                <div class="item-header">
+                <div class="item-header" ng-class='{"mb-0" : !flow.bodyVisible}'>
                     <div class="left-side">
                         <span class="arrow-wrap" title='Toggle flow visible' ng-click='toggleFlowVisible(flow)'>
                             <i class="arrow" ng-class="{'up' : flow.bodyVisible, 'down': !flow.bodyVisible}"></i>
@@ -78,7 +99,7 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.count'>
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                         </div>
                                     </div>
                                 </td>
@@ -86,7 +107,7 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.selector'>
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                         </div>
                                     </div>
                                 </td>
@@ -94,7 +115,7 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.url'>
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                         </div>
                                     </div>
                                 </td>
@@ -102,7 +123,7 @@
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.data'>
                                         <div class="input-group-append">
-                                            <button type="submit" class="btn btn-primary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                         </div>
                                     </div>
                                 </td>
@@ -164,7 +185,7 @@
 
 
                             <div class="col-6">
-                                <button type="submit" title='toggle flow' ng-class="{'btn-block' : flow.temp.newShortcut.type.id == 10 || flow.temp.newShortcut.type.id == 14 }"
+                                <button type="submit" title='toggle flow' ng-class="{'btn-block' : flow.temp.newShortcut.type.id == 10 || flow.temp.newShortcut.type.id == 14 || flow.temp.newShortcut.type.id == 15 }"
                                     class="btn btn-success btn-sm">Create shortcut</button>
                             </div>
                         </div>

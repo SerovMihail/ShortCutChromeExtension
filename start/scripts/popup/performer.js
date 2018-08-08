@@ -2,6 +2,47 @@ var app = angular.module('ShortcutsFlow', []);
 
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
+    $scope.lists = [
+        {
+            label: "Men",
+            allowedTypes: ['man'],
+            max: 4,
+            people: [
+                {name: "Bob", type: "man"},
+                {name: "Charlie", type: "man"},
+                {name: "Dave", type: "man"}
+            ]
+        },
+        {
+            label: "Women",
+            allowedTypes: ['woman'],
+            max: 4,
+            people: [
+                {name: "Alice", type: "woman"},
+                {name: "Eve", type: "woman"},
+                {name: "Peggy", type: "woman"}
+            ]
+        },
+        {
+            label: "People",
+            allowedTypes: ['man', 'woman'],
+            max: 6,
+            people: [
+                {name: "Frank", type: "man"},
+                {name: "Mallory", type: "woman"},
+                {name: "Alex", type: "unknown"},
+                {name: "Oscar", type: "man"},
+                {name: "Wendy", type: "woman"}
+            ]
+        }
+    ];
+
+    // Model to JSON for demo purpose
+    $scope.$watch('lists', function(lists) {
+        $scope.modelAsJson = angular.toJson(lists, true);
+    }, true);
+
+
     $scope.typesOfShortcut = [
         { 'id': 1, 'group': 'Location', 'name': 'Back', 'action': 'back' },
         { 'id': 2, 'group': 'Location', 'name': 'Forward', 'action': 'forward' },
@@ -17,8 +58,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 11, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
         { 'id': 13, 'group': 'Document', 'name': 'Past in focused element using buffer', 'action': 'pastinfocusedelement' },
-        { 'id': 14, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' },
-        { 'id': 15, 'group': 'Document', 'name': 'Past in focused element using input', 'action': 'pastusinginput' }
+        { 'id': 14, 'group': 'Document', 'name': 'Past in focused element using input', 'action': 'pastusinginput' },
+        { 'id': 15, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
+        
     ];
 
     $scope.temp = {};
@@ -63,7 +105,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         saveInLocalStorage('flows', $scope.vm);
     }
 
-    $scope.toggleFlowVisible = function(flow) {
+    $scope.toggleFlowVisible = function (flow) {
         flow.bodyVisible = !flow.bodyVisible;
 
         saveInLocalStorage('flows', $scope.vm);
@@ -72,7 +114,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     // shortcuts
 
     $scope.createNewShortcut = function (flow) {
-       
+
         var shortcutInfo = flow.temp.newShortcut;
 
         flow.shortcuts.push({
@@ -81,11 +123,11 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             name: shortcutInfo.type.name,
             count: shortcutInfo.count ? shortcutInfo.count : null,
             delay: shortcutInfo.delay ? shortcutInfo.delay : null,
-            selector: shortcutInfo.selector ? shortcutInfo.selector : null  ,          
-            url: shortcutInfo.url ? shortcutInfo.url : null,            
-            data: shortcutInfo.data ? shortcutInfo.data : null            
-        });       
-        
+            selector: shortcutInfo.selector ? shortcutInfo.selector : null,
+            url: shortcutInfo.url ? shortcutInfo.url : null,
+            data: shortcutInfo.data ? shortcutInfo.data : null
+        });
+
         flow.temp = null;
 
         saveInLocalStorage('flows', $scope.vm);
@@ -100,8 +142,8 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         saveInLocalStorage('flows', $scope.vm);
     }
 
-    $scope.updateShortcut = function() {
-        
+    $scope.updateShortcut = function () {
+
         saveInLocalStorage('flows', $scope.vm);
     }
 

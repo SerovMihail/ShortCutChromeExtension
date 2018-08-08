@@ -106,6 +106,10 @@
     top: 35%;
 }
 
+.mb-0 {
+    margin-bottom: 0;
+}
+
 .table .input-sm-custom {
     height: 27px;
     padding: .25rem 5px;
