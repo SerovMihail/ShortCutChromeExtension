@@ -1,47 +1,101 @@
 /**
- * The dnd-list should always have a min-height,
- * otherwise you can't drop to it once it's empty
+ * For the correct positioning of the placeholder element, the dnd-list and
+ * it's children must have position: relative
  */
- .simpleDemo ul[dnd-list] {
-    min-height: 42px;
-    padding-left: 0px;
-}
-
-/**
- * The dndDraggingSource class will be applied to
- * the source element of a drag operation. It makes
- * sense to hide it to give the user the feeling
- * that he's actually moving it.
- */
-.simpleDemo ul[dnd-list] .dndDraggingSource {
-    display: none;
-}
-
-/**
- * An element with .dndPlaceholder class will be
- * added to the dnd-list while the user is dragging
- * over it.
- */
-.simpleDemo ul[dnd-list] .dndPlaceholder {
-    background-color: #ddd;
-    display: block;
-    min-height: 42px;
-}
-
-.simpleDemo ul[dnd-list] li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: -1px;
-}
-
-/**
- * Show selected elements in green
- */
-.simpleDemo ul[dnd-list] li.selected {
-    background-color: #dff0d8;
-    color: #3c763d;
-}
+ .flow-item ul[dnd-list],
+ .flow-item ul[dnd-list] > li {
+   position: relative;
+ }
+ 
+ /**
+  * The dnd-list should always have a min-height,
+  * otherwise you can't drop to it once it's empty
+  */
+ .flow-item ul[dnd-list] {
+   min-height: 42px;
+   padding-left: 0px;
+ }
+ 
+ /**
+  * The dndDraggingSource class will be applied to
+  * the source element of a drag operation. It makes
+  * sense to hide it to give the user the feeling
+  * that he's actually moving it.
+  */
+ .flow-item ul[dnd-list] .dndDraggingSource {
+   display: none;
+ }
+ 
+ /**
+  * An element with .dndPlaceholder class will be
+  * added to the dnd-list while the user is dragging
+  * over it.
+  */
+ .flow-item ul[dnd-list] .dndPlaceholder {
+   display: block;
+   background-color: #ddd;
+   padding: 10px 15px;
+   min-height: 42px;
+ }
+ 
+ /**
+  * The dnd-lists's child elements currently MUST have
+  * position: relative. Otherwise we can not determine
+  * whether the mouse pointer is in the upper or lower
+  * half of the element we are dragging over. In other
+  * browsers we can use event.offsetY for this.
+  */
+ .flow-item ul[dnd-list] li {
+   background-color: #fff;
+   border: 1px solid #ddd;
+   border-top-right-radius: 4px;
+   border-top-left-radius: 4px;
+   display: block;
+   margin-bottom: -1px;
+ 
+   /* Disable text selection if item is not draggable */
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+ }
+ 
+ .flow-item ul[dnd-list] li dnd-nodrag {
+   display: block;
+   padding: 10px 15px;
+ }
+ 
+ /**
+  * Gender-specifc background
+  */
+ .flow-item ul[dnd-list] li.background-man {
+   background-color: #CAE0FC;
+ }
+ 
+ .flow-item ul[dnd-list] li.background-woman {
+   background-color: #FFE2F5;
+ }
+ 
+ .flow-item ul[dnd-list] input.background-man {
+   background-color: #D8E9FF;
+   color: #2F4D99;
+ }
+ 
+ .flow-item ul[dnd-list] input.background-woman {
+   background-color: #FFF0FA;
+   color: #D84FA7;
+ }
+ 
+ /**
+  * Handle positioning
+  */
+ .flow-item .handle {
+   cursor: move;  
+   top: 14px;
+ }
+ 
+ .flow-item .name {
+   margin-left: 20px;
+ }

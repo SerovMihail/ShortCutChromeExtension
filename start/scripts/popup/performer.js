@@ -1,11 +1,11 @@
-var app = angular.module('ShortcutsFlow', []);
+var app = angular.module('ShortcutsFlow', ['dndLists']);
 
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.lists = [
         {
             label: "Men",
-            allowedTypes: ['man'],
+            
             max: 4,
             people: [
                 {name: "Bob", type: "man"},
@@ -15,7 +15,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         },
         {
             label: "Women",
-            allowedTypes: ['woman'],
+            
             max: 4,
             people: [
                 {name: "Alice", type: "woman"},
@@ -25,7 +25,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         },
         {
             label: "People",
-            allowedTypes: ['man', 'woman'],
+            
             max: 6,
             people: [
                 {name: "Frank", type: "man"},
@@ -168,6 +168,15 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             }
 
         });
+    }
+
+    // drop and down 
+
+    $scope.dndMoved = function(flow, index) {
+        flow.shortcuts.splice(index, 1);
+
+        saveInLocalStorage('flows', $scope.vm);
+
     }
 
     function saveInLocalStorage(key, data) {

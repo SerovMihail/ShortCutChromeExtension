@@ -150,7 +150,7 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
         //     'elem.css({"border" : "2px solid red"});' +
         //     'elem.focus();';
 
-        chrome.tabs.executeScript(null, { 'file': "start/scripts/libs/jquery-3.3.1.min.js" }, function () {
+        chrome.tabs.executeScript(null, { 'file': "start/scripts/libs/jquery/jquery-3.3.1.min.js" }, function () {
             chrome.tabs.executeScript(null, { 'code': 'var count = ' + count + ';' }, function () {
                 chrome.tabs.executeScript(null, { 'file': 'start/scripts/injectModules/tab.js' }, function () {
                     callback();
