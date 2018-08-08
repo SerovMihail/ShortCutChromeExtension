@@ -1,8 +1,6 @@
-(function() {
+document.activeElement.click();
 
-    document.activeElement.click();
-    
-})();
+
 
 
 

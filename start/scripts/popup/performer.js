@@ -16,8 +16,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         // { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
         { 'id': 11, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
-        { 'id': 13, 'group': 'Document', 'name': 'Past in focused element', 'action': 'pastinfocusedelement' },
-        { 'id': 14, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
+        { 'id': 13, 'group': 'Document', 'name': 'Past in focused element using buffer', 'action': 'pastinfocusedelement' },
+        { 'id': 14, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' },
+        { 'id': 15, 'group': 'Document', 'name': 'Past in focused element using input', 'action': 'pastusinginput' }
     ];
 
     $scope.temp = {};
@@ -81,7 +82,8 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             count: shortcutInfo.count ? shortcutInfo.count : null,
             delay: shortcutInfo.delay ? shortcutInfo.delay : null,
             selector: shortcutInfo.selector ? shortcutInfo.selector : null  ,          
-            url: shortcutInfo.url ? shortcutInfo.url : null            
+            url: shortcutInfo.url ? shortcutInfo.url : null,            
+            data: shortcutInfo.data ? shortcutInfo.data : null            
         });       
         
         flow.temp = null;
