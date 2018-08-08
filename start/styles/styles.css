@@ -110,6 +110,11 @@
     margin-bottom: 0;
 }
 
+.flow-item .handle {
+    cursor: move;  
+    top: 14px;
+  }
+
 .table .input-sm-custom {
     height: 27px;
     padding: .25rem 5px;

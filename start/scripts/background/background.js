@@ -49,13 +49,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     if (request.action === 'executeFlow') {
 
-        var settings = JSON.parse(localStorage.currentFlow);
-
-        var index = 0;
+        var settings = JSON.parse(localStorage.currentFlow),
+            index = 0;        
 
         delay_loop();
 
         function delay_loop() {
+
             setTimeout(function () {
 
                 el = settings[index];
@@ -69,19 +69,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 });
 
             }, 1000);
-
-        }
-
-
-        // settings.forEach(function (el, index) {
-
-        //     setTimeout(() => {
-        //         handleAction(el.action, el.count, el.selector, el.url);
-        //     }, index * 2000);
-
-        // });
+        }       
     }
-
 });
 
 
@@ -111,25 +100,7 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
         var clipboardData = localStorage.clipboardData;
 
         chrome.tabs.create({ url: clipboardData }, callback);
-        // let createNewTab = () => {
-        //     chrome.tabs.create({ url: clipboardData })
-        // }
-        // if (request.matchurl) {
-        //     let queryOption = { url: request.matchurl }
-        //     if (request.currentWindow) {
-        //         queryOption.currentWindow = true
-        //     }
-        //     chrome.tabs.query(queryOption, function (tabs) {
-        //         if (tabs.length > 0) {
-        //             chrome.tabs.update(tabs[0].id, { active: true })
-        //             chrome.windows.update(tabs[0].windowId, { focused: true })
-        //         } else {
-        //             createNewTab()
-        //         }
-        //     })
-        // } else {
-        //    createNewTab()
-        //}
+        
     } else if (action === 'back') {
         chrome.tabs.executeScript(null, { 'code': 'window.history.back()' }, function () {
             callback();
@@ -142,13 +113,7 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
         chrome.tabs.executeScript(null, { 'code': 'window.location.reload()' }, function () {
             callback();
         })
-    } else if (action === 'tab') {
-
-        // var injectCode =
-        //     'var elem = $(":input, a[href], area[href], iframe").eq(' + (count - 1) + ');' +
-
-        //     'elem.css({"border" : "2px solid red"});' +
-        //     'elem.focus();';
+    } else if (action === 'tab') {        
 
         chrome.tabs.executeScript(null, { 'file': "start/scripts/libs/jquery/jquery-3.3.1.min.js" }, function () {
             chrome.tabs.executeScript(null, { 'code': 'var count = ' + count + ';' }, function () {
@@ -174,14 +139,11 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
 
     } else if (action === 'clickfocusedelement') {
 
-
         chrome.tabs.executeScript(null, {
             file: 'start/scripts/injectModules/clickFocusedElement.js'
         }, function () {
             callback();
         });
-
-
 
     } else if (action === 'pastinfocusedelement') {
 
@@ -194,8 +156,6 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
             });
         });
 
-
-
     } else if (action === 'pastusinginput') {
 
         chrome.tabs.executeScript(null, { 'code': "var data = '" + data + "';" }, function () {
@@ -206,7 +166,6 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
                 callback();
             });
         });
-
 
 
     } else if (action === 'selectelementusingselector') {
@@ -241,21 +200,7 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
 
             }, 100);
 
-        }
-
-        // chrome.tabs.executeScript(null, { 'code': "var selector = '" + selector + "';" }, function () {
-        //     //    chrome.tabs.executeScript(null, {
-        //     //         runAt: 'document_end',
-        //     //         //code: "var selector = '" + selector + "'; waitForEl(selector,function(error){if(error){alert('Problems with flow. Reexecute your flow or change shortcuts')}; [].forEach.call(document.querySelectorAll('[tabindex]'),function(el){el.tabIndex=1}); var elem=document.querySelector(selector);elem.style.background='red';elem.tabIndex=1;elem.focus()});function waitForEl(selector,callback){var rowLength=document.querySelectorAll(selector).length;var watingCounter=0;if(rowLength==1){callback()}else{setTimeout(function(){waitForEl(selector,callback);watingCounter=++watingCounter;if(watingCounter>20){callback('error')}},100)}}"
-        //     //         file: "start/scripts/injectModules/selectelEmentUsingSelector.js"
-        //     //     }, function () {
-        //     //         callback();
-        //     //     });
-
-
-
-        // });
-
+        }  
 
     } else {
         return false;
