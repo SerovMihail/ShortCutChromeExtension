@@ -38,8 +38,6 @@
         <div class="flows" ng-if='vm.flows.length > 0'>
             <div class="flow-item mb-3" ng-repeat="flow in vm.flows track by $index">
 
-
-
                 <div class="item-header" ng-class='{"mb-0" : !flow.bodyVisible}'>
                     <div class="left-side">
                         <span class="arrow-wrap" title='Toggle flow visible' ng-click='toggleFlowVisible(flow)'>
