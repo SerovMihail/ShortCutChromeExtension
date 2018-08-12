@@ -12,17 +12,17 @@
   },
   "browser_action": {
     "default_icon": {
-      "128": "/start/content/icons/64.png",
-      "16": "/start/content/icons/64.png",
-      "48": "/start/content/icons/64.png"
+      "128": "/start/content/icons/100.png",
+      "16": "/start/content/icons/16.png",
+      "48": "/start/content/icons/48.png"
     },
     "default_popup": "/start/popup.html",
-    "default_title": "app"
+    "default_title": "Shortcut Extension"
   },
   "icons": {
-    "128": "/start/content/icons/64.png",
-    "16": "/start/content/icons/64.png",
-    "48": "/start/content/icons/64.png"
+    "128": "/start/content/icons/100.png",
+    "16": "/start/content/icons/16.png",
+    "48": "/start/content/icons/48.png"
   },
   "permissions": [
     "clipboardWrite",
