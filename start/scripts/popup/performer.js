@@ -1,6 +1,6 @@
 var app = angular.module('ShortcutsFlow', ['dndLists']);
 
-app.controller('ShortcutsCtrl', ['$scope', function ($scope) {    
+app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.typesOfShortcut = [
         { 'id': 1, 'group': 'Location', 'name': 'Back', 'action': 'back' },
@@ -16,10 +16,10 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         // { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
         { 'id': 11, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
         { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
-        { 'id': 13, 'group': 'Document', 'name': 'Past in focused element using buffer', 'action': 'pastinfocusedelement' },
-        { 'id': 14, 'group': 'Document', 'name': 'Past in focused element using input', 'action': 'pastusinginput' },
+        { 'id': 13, 'group': 'Document', 'name': 'Paste in focused element using buffer', 'action': 'pasteinfocusedelement' },
+        { 'id': 14, 'group': 'Document', 'name': 'Paste in focused element using input', 'action': 'pasteusinginput' },
         { 'id': 15, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
-        
+
     ];
 
     $scope.temp = {};
@@ -44,15 +44,61 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     // work with flows
 
     $scope.createNewFlow = function () {
-        $scope.vm.flows.push({
-            index: $scope.vm.flows.length + 1,
-            name: $scope.newFlowName,
-            shortcuts: []
-        });
 
-        $scope.newFlowName = "";
+        try {
+            var obj = JSON.parse($scope.newFlowName);
 
-        saveInLocalStorage('flows', $scope.vm);
+            $scope.vm.flows.push({
+                index: $scope.vm.flows.length + 1,
+                name: obj.name + '_1',
+                shortcuts: obj.shortcuts
+            });
+
+            $scope.newFlowName = "";
+    
+            saveInLocalStorage('flows', $scope.vm);
+
+        } catch {
+
+            $scope.vm.flows.push({
+                index: $scope.vm.flows.length + 1,
+                name: $scope.newFlowName.substring(0, 15),
+                shortcuts: []
+            });
+    
+            $scope.newFlowName = "";
+    
+            saveInLocalStorage('flows', $scope.vm);
+            
+        }
+
+        
+    }
+
+    $scope.copyFlow = function (flow, index) {
+
+        var newFlow = Object.assign({}, flow);
+        newFlow.index = $scope.vm.flows.length + 1;
+
+        $scope.vm.flows.splice(index, 0, newFlow);
+
+        saveInLocalStorage('flows', $scope.vm)
+    }
+
+    $scope.copyFlowToClipboard = function (flow) {
+
+        var text = JSON.stringify(flow);
+
+        let copyDiv = document.createElement('div')
+        copyDiv.contentEditable = true
+        document.body.appendChild(copyDiv)
+        copyDiv.innerHTML = text
+        copyDiv.unselectable = 'off'
+        copyDiv.focus()
+        document.execCommand('SelectAll')
+        document.execCommand('Copy', false, null)
+        document.body.removeChild(copyDiv)
+
     }
 
     $scope.removeFlow = function (index) {
@@ -131,7 +177,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     // drop and down 
 
-    $scope.dndMoved = function(flow, index) {
+    $scope.dndMoved = function (flow, index) {
 
         flow.shortcuts.splice(index, 1);
 

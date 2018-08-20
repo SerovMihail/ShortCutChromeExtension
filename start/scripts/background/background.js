@@ -145,23 +145,23 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
             callback();
         });
 
-    } else if (action === 'pastinfocusedelement') {
+    } else if (action === 'pasteinfocusedelement') {
 
         chrome.tabs.executeScript(null, { 'code': "var data = '" + localStorage.clipboardData + "';" }, function () {
             chrome.tabs.executeScript(null, {
                 runAt: 'document_end',
-                file: 'start/scripts/injectModules/pastInFocusedElement.js'
+                file: 'start/scripts/injectModules/pasteInFocusedElement.js'
             }, function () {
                 callback();
             });
         });
 
-    } else if (action === 'pastusinginput') {
+    } else if (action === 'pasteusinginput') {
 
         chrome.tabs.executeScript(null, { 'code': "var data = '" + data + "';" }, function () {
             chrome.tabs.executeScript(null, {
                 runAt: 'document_end',
-                file: 'start/scripts/injectModules/pastInFocusedElement.js'
+                file: 'start/scripts/injectModules/pasteInFocusedElement.js'
             }, function () {
                 callback();
             });

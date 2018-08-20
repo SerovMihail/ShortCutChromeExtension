@@ -14,6 +14,8 @@
     <script src="scripts/libs/JQuery/jquery-3.3.1.min.js"></script>
     <script src="scripts/libs/anguluar/angular.min.js"></script>
     <script src="scripts/libs/anguluar/directives/dnd-angular.Directive.js"></script>
+    <script defer src="scripts/libs/fontawesome/font-awesome.js"></script>
+
 </head>
 
 <body>
@@ -22,11 +24,11 @@
         <h1 class="main-title">Chrome Shortcut Extension</h1>
         <form class="form-inline" ng-submit="createNewFlow()">
             <div class="input-group input-group-sm mb-3">
-                <input type="text" class="form-control" required placeholder="Write new flow name here" ng-model='newFlowName'>
+                <input type="text" class="form-control" required placeholder="Write new flow name here or flow JSON" ng-model='newFlowName'>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
                 </div>
-            </div>
+            </div>            
         </form>
 
         <div ng-if='vm.flows.length == 0'>
@@ -44,7 +46,15 @@
                             <i class="arrow" ng-class="{'up' : flow.bodyVisible, 'down': !flow.bodyVisible}"></i>
                         </span>
                         <div class="item-name" ng-bind="flow.name"></div>
-                        <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute flow</button>
+                        <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute
+                            flow
+                        </button>
+                        <span title='Clone this flow' class="ml-20" ng-click='copyFlow(flow, $index)'>
+                            <i class="fas fa-clone"></i>
+                        </span>
+                        <span title='Copy JSON of this flow. Useful for sharing' class="ml-20" ng-click='copyFlowToClipboard(flow)'>
+                            <i class="fas fa-copy"></i>
+                        </span>
                     </div>
                     <div class="right-side">
                         <button type="button" class="btn btn-outline-danger btn-sm" style="width: 30px; padding-top: 2px;" ng-click='removeFlow(flow.index)'
@@ -73,15 +83,11 @@
                                 <td colspan="3">Shortcuts list is empty. Create new shortcut</td>
                             </tr>
 
-                            <tr class="dndPlaceholder">
-                                <td colspan="3" style="text-align: center;">
-                                    <strong>Drop shortcut here</strong>
-                                </td>
-                            </tr>
 
 
-                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts" dnd-draggable="shortcut" dnd-type="shortcut.action"
-                                dnd-moved="dndMoved(flow, $index);">
+
+                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by shortcut.index" dnd-draggable="shortcut"
+                                dnd-type="shortcut.action" dnd-moved="dndMoved(flow, $index);">
 
                                 <td>
                                     <div title='drag and drop' dnd-handle class="handle">:::</div>
@@ -124,9 +130,9 @@
                                             </div>
                                         </div>
                                     </dnd-nodrag>
-                                    
+
                                 </td>
-                                <td ng-if="shortcut.action == 'pastusinginput'">
+                                <td ng-if="shortcut.action == 'pasteusinginput'">
                                     <dnd-nodrag>
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.data'>
@@ -139,7 +145,7 @@
                                 <td ng-if="shortcut.action != 'selectelementusingselector' 
                                         && shortcut.action != 'tab'  
                                         && shortcut.action != 'opentabbyurl'
-                                        && shortcut.action != 'pastusinginput'">
+                                        && shortcut.action != 'pasteusinginput'">
                                     <dnd-nodrag>-</dnd-nodrag>
                                 </td>
 
@@ -150,6 +156,12 @@
                                     </dnd-nodrag>
                                 </td>
 
+                            </tr>
+
+                            <tr class="dndPlaceholder">
+                                <td colspan="3" style="text-align: center;">
+                                    <strong>Drop shortcut here</strong>
+                                </td>
                             </tr>
 
                         </tbody>
@@ -189,7 +201,7 @@
                                     <input type="text" required ng-model="flow.temp.newShortcut.url" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "pastusinginput"'>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "pasteusinginput"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Data</span>

@@ -132,6 +132,10 @@
     padding-bottom: 6px;
 }
 
+.ml-20 {
+    margin-left: 20px;
+}
+
 .arrow-wrap .arrow {
     border: solid black;
     border-width: 0 1px 1px 0;
@@ -152,31 +156,3 @@
 .table td {
     vertical-align: middle !important;
 }
-
-/* .wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-add-new::after {
-    content: "+";
-    display: block;
-    right: -38px;
-    top: 4px;
-    position: absolute;
-    background: green;
-    width: 13px;
-    height: 15px;
-    padding: 7px;
-    border-radius: 10px 10px 10px 0;
-
-}
-
-.wrapper .flows .flow-item .item-body .shortcuts-list .shortcut-exist::after {
-    content: "x";
-    display: block;
-    right: -38px;
-    top: 4px;
-    position: absolute;
-    background: red;
-    width: 13px;
-    height: 15px;
-    padding: 7px;
-    border-radius: 10px 10px 10px 0;
-
-} */
