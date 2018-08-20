@@ -73,17 +73,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         }
 
         
-    }
-
-    $scope.copyFlow = function (flow, index) {
-
-        var newFlow = Object.assign({}, flow);
-        newFlow.index = $scope.vm.flows.length + 1;
-
-        $scope.vm.flows.splice(index, 0, newFlow);
-
-        saveInLocalStorage('flows', $scope.vm)
-    }
+    }    
 
     $scope.copyFlowToClipboard = function (flow) {
 

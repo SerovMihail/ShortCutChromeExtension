@@ -48,10 +48,7 @@
                         <div class="item-name" ng-bind="flow.name"></div>
                         <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute
                             flow
-                        </button>
-                        <span title='Clone this flow' class="ml-20" ng-click='copyFlow(flow, $index)'>
-                            <i class="fas fa-clone"></i>
-                        </span>
+                        </button>                       
                         <span title='Copy JSON of this flow. Useful for sharing' class="ml-20" ng-click='copyFlowToClipboard(flow)'>
                             <i class="fas fa-copy"></i>
                         </span>
