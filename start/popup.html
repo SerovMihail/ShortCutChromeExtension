@@ -14,7 +14,7 @@
     <script src="scripts/libs/JQuery/jquery-3.3.1.min.js"></script>
     <script src="scripts/libs/anguluar/angular.min.js"></script>
     <script src="scripts/libs/anguluar/directives/dnd-angular.Directive.js"></script>
-    <script defer src="scripts/libs/fontawesome/font-awesome.js"></script>
+    <script defer src="scripts/libs/fontawesome/font-awesome.js"></script>   
 
 </head>
 
@@ -28,7 +28,7 @@
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
                 </div>
-            </div>            
+            </div>
         </form>
 
         <div ng-if='vm.flows.length == 0'>
@@ -48,7 +48,7 @@
                         <div class="item-name" ng-bind="flow.name"></div>
                         <button type="button" class="btn btn-primary  btn-sm" ng-disabled="!flow.shortcuts.length" ng-click="executeFlow($index)">Execute
                             flow
-                        </button>                       
+                        </button>
                         <span title='Copy JSON of this flow. Useful for sharing' class="ml-20" ng-click='copyFlowToClipboard(flow)'>
                             <i class="fas fa-copy"></i>
                         </span>
@@ -83,8 +83,8 @@
 
 
 
-                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index" dnd-draggable="shortcut"
-                                dnd-type="shortcut.action" dnd-moved="dndMoved(flow, $index);">
+                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index" dnd-draggable="shortcut" dnd-type="shortcut.action"
+                                dnd-moved="dndMoved(flow, $index);">
 
                                 <td>
                                     <div title='drag and drop' dnd-handle class="handle">:::</div>
@@ -117,7 +117,7 @@
                                     </dnd-nodrag>
 
                                 </td>
-                                <td ng-if="shortcut.action == 'opentabbyurl'">
+                                <td ng-if="shortcut.action == 'opentabbyurl' || shortcut.action == 'loadgooglesheets'">
 
                                     <dnd-nodrag>
                                         <div class="input-group input-group-sm">
@@ -139,10 +139,28 @@
                                         </div>
                                     </dnd-nodrag>
                                 </td>
+                                <td ng-if="shortcut.action == 'getvaluefromloadedsheet'">
+                                    <dnd-nodrag>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.column'>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.row'>
+                                            <div class="input-group-append">
+                                                <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
+                                            </div>
+                                        </div>
+                                    </dnd-nodrag>
+                                </td>
                                 <td ng-if="shortcut.action != 'selectelementusingselector' 
                                         && shortcut.action != 'tab'  
                                         && shortcut.action != 'opentabbyurl'
-                                        && shortcut.action != 'pasteusinginput'">
+                                        && shortcut.action != 'pasteusinginput'
+                                        && shortcut.action != 'loadgooglesheets'
+                                        && shortcut.action != 'getvaluefromloadedsheet'">
                                     <dnd-nodrag>-</dnd-nodrag>
                                 </td>
 
@@ -190,7 +208,7 @@
                                     <input type="text" required ng-model="flow.temp.newShortcut.selector" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
-                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "opentabbyurl"'>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "opentabbyurl" || flow.temp.newShortcut.type.action == "loadgooglesheets"'>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Url</span>
@@ -204,6 +222,20 @@
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Data</span>
                                     </div>
                                     <input type="text" required ng-model="flow.temp.newShortcut.data" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+                            <div class="col-6" ng-if='flow.temp.newShortcut.type.action == "getvaluefromloadedsheet"'>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Column</span>
+                                    </div>
+                                    <input type="number" required ng-model="flow.temp.newShortcut.column" class="form-control" min='1' aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Row</span>
+                                    </div>                                    
+                                    <input type="number" required ng-model="flow.temp.newShortcut.row" class="form-control" min='1' aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
 
@@ -224,7 +256,7 @@
         <!-- flows -->
     </div>
     <!-- wrapper -->
-    <script src="scripts/popup/performer.js"></script>
+    <script src="scripts/popup/performer.js"></script>  
 
 </body>
 

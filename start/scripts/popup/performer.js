@@ -18,7 +18,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
         { 'id': 13, 'group': 'Document', 'name': 'Paste in focused element using buffer', 'action': 'pasteinfocusedelement' },
         { 'id': 14, 'group': 'Document', 'name': 'Paste in focused element using input', 'action': 'pasteusinginput' },
-        { 'id': 15, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' }
+        { 'id': 15, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' },
+        { 'id': 16, 'group': 'Google sheets', 'name': 'Load google sheets', 'action': 'loadgooglesheets' },
+        { 'id': 17, 'group': 'Google sheets', 'name': 'Get value from loaded sheet', 'action': 'getvaluefromloadedsheet' },
 
     ];
 
@@ -123,7 +125,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             delay: shortcutInfo.delay ? shortcutInfo.delay : null,
             selector: shortcutInfo.selector ? shortcutInfo.selector : null,
             url: shortcutInfo.url ? shortcutInfo.url : null,
-            data: shortcutInfo.data ? shortcutInfo.data : null
+            data: shortcutInfo.data ? shortcutInfo.data : null,
+            column: shortcutInfo.column ? shortcutInfo.column - 1 : null,
+            row: shortcutInfo.row ? shortcutInfo.row - 1: null,
         });
 
         flow.temp = null;

@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
                 el = settings[index];
 
-                handleAction(el.action, el.count, el.selector, el.url, el.data, function () {
+                handleAction(el.action, el.count, el.selector, el.url, el.data, el.column, el.row, function () {
 
                     index = ++index;
                     if (index < settings.length) {
@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 
 
-let handleAction = (action, count, selector, url, data, callback = {}) => {
+let handleAction = (action, count, selector, url, data, column, row, callback = {}) => {
 
     if (action === 'newtab') {
         chrome.tabs.create({}, function () {
@@ -201,6 +201,30 @@ let handleAction = (action, count, selector, url, data, callback = {}) => {
             }, 100);
 
         }  
+
+    } else if (action === 'loadgooglesheets') {
+
+        Tabletop.init({
+            key: url,
+            callback: showInfo,
+            simpleSheet: true
+        });
+
+        function showInfo(data) {
+            localStorage.dataFromSheet = JSON.stringify(data);
+            callback();
+        }
+        
+
+    } else if (action === 'getvaluefromloadedsheet') {
+        
+        var data  = JSON.parse(localStorage.dataFromSheet);
+
+        var rows = Object.values(data[column]);
+        
+        copyToClipboard(rows[row]);
+        localStorage.clipboardData = rows[row];          
+        callback();
 
     } else {
         return false;
