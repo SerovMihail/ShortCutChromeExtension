@@ -23,7 +23,7 @@
 
         <h1 class="main-title">Chrome Shortcut Extension</h1>
         <form class="form-inline" ng-submit="createNewFlow()">
-            <div class="input-group input-group-sm mb-3">
+            <div class="input-group input-group-sm mb-3" style="width: 100vw;">
                 <input type="text" class="form-control" required placeholder="Write new flow name here or flow JSON" ng-model='newFlowName'>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary  btn-sm">Create Flow</button>
@@ -68,7 +68,7 @@
                         <thead>
                             <tr>
                                 <th style='border-top: 0; font-weight: 500; width: 6%;' scope="col" title="Drag and drop"></th>
-                                <th style='border-top: 0; font-weight: 500; width: 50%;' scope="col" title="Short name of action">Action</th>
+                                <th style='border-top: 0; font-weight: 500; width: 25%;' scope="col" title="Short name of action">Action</th>
                                 <th style='border-top: 0; font-weight: 500;' scope="col" title='Count for tabs, Selector for element'>Info</th>
 
                                 <th style='border-top: 0; font-weight: 500;width: 10%;' scope="col"></th>
@@ -83,7 +83,7 @@
 
 
 
-                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by shortcut.index" dnd-draggable="shortcut"
+                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index" dnd-draggable="shortcut"
                                 dnd-type="shortcut.action" dnd-moved="dndMoved(flow, $index);">
 
                                 <td>

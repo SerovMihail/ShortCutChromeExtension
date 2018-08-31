@@ -48,6 +48,9 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         try {
             var obj = JSON.parse($scope.newFlowName);
 
+            if(!obj.name || !obj.shortcuts)
+                throw 'isNumber, not JSON';
+
             $scope.vm.flows.push({
                 index: $scope.vm.flows.length + 1,
                 name: obj.name + '_1',

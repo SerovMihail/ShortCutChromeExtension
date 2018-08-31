@@ -7,3 +7,4 @@ var elem = document.querySelector(selector);
 elem.style.background = "red";
 elem.tabIndex = 1;
 elem.focus();
+
