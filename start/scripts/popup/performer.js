@@ -1,4 +1,5 @@
-var app = angular.module('ShortcutsFlow', ['dndLists']);
+//var app = angular.module('ShortcutsFlow', ['dndLists']);
+var app = angular.module('ShortcutsFlow', []);
 
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 

@@ -1,6 +1,6 @@
 {
-    "index": 1,
-    "name": "Paypal Flow",
+    "index": 0,
+    "name": "Paypal Flow_1",
     "shortcuts": [
         {
             "index": 0,
@@ -183,8 +183,33 @@
             "data": null,
             "column": null,
             "row": null
+        },
+        {
+            "index": 15,
+            "action": "selectelementusingselector",
+            "name": "Select element using selector",
+            "count": null,
+            "delay": null,
+            "selector": ".preview-sendMoney",
+            "url": null,
+            "data": null,
+            "column": null,
+            "row": null
+        },
+        {
+            "index": 16,
+            "action": "clickfocusedelement",
+            "name": "Click focused element",
+            "count": null,
+            "delay": null,
+            "selector": null,
+            "url": null,
+            "data": null,
+            "column": null,
+            "row": null
         }
     ],
+    "$$hashKey": "object:7",
     "bodyVisible": true,
     "temp": null
 }
