@@ -3,24 +3,25 @@ var app = angular.module('ShortcutsFlow', ['dndLists']);
 app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
 
     $scope.typesOfShortcut = [
-        { 'id': 1, 'group': 'Location', 'name': 'Back', 'action': 'back' },
-        { 'id': 2, 'group': 'Location', 'name': 'Forward', 'action': 'forward' },
-        { 'id': 3, 'group': 'Location', 'name': 'Reload', 'action': 'reload' },
-        { 'id': 4, 'group': 'Location', 'name': 'Copy current tab url', 'action': 'copyurl' },
-        { 'id': 5, 'group': 'Tabs', 'name': 'New tab', 'action': 'newtab' },
-        { 'id': 6, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
-        { 'id': 7, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
-        { 'id': 8, 'group': 'Tabs', 'name': 'Next tab', 'action': 'nexttab' },
-        { 'id': 9, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
-        { 'id': 10, 'group': 'Tabs', 'name': 'New tab using input', 'action': 'opentabbyurl' },
+        { 'id': 1, 'group': 'Google sheets', 'name': 'Load google sheets', 'action': 'loadgooglesheets' },
+        { 'id': 2, 'group': 'Google sheets', 'name': 'Get value from loaded sheet', 'action': 'getvaluefromloadedsheet' },
+        
+        { 'id': 3, 'group': 'Tabs', 'name': 'New tab', 'action': 'newtab' },
+        { 'id': 4, 'group': 'Tabs', 'name': 'Close tab', 'action': 'closetab' },
+        { 'id': 5, 'group': 'Tabs', 'name': 'Previous tab', 'action': 'prevtab' },
+        { 'id': 6, 'group': 'Tabs', 'name': 'Next tab', 'action': 'nexttab' },
+        { 'id': 7, 'group': 'Tabs', 'name': 'New tab using buffer', 'action': 'gototab' },
+        { 'id': 8, 'group': 'Tabs', 'name': 'New tab using input', 'action': 'opentabbyurl' },
         // { 'id': 9, 'group': 'Document', 'name': 'Tabulation', 'action': 'tab' },
-        { 'id': 11, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
-        { 'id': 12, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
-        { 'id': 13, 'group': 'Document', 'name': 'Paste in focused element using buffer', 'action': 'pasteinfocusedelement' },
-        { 'id': 14, 'group': 'Document', 'name': 'Paste in focused element using input', 'action': 'pasteusinginput' },
-        { 'id': 15, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' },
-        { 'id': 16, 'group': 'Google sheets', 'name': 'Load google sheets', 'action': 'loadgooglesheets' },
-        { 'id': 17, 'group': 'Google sheets', 'name': 'Get value from loaded sheet', 'action': 'getvaluefromloadedsheet' },
+        { 'id': 9, 'group': 'Document', 'name': 'Copy focused element text', 'action': 'copyfocuedtext' },
+        { 'id': 10, 'group': 'Document', 'name': 'Click focused element', 'action': 'clickfocusedelement' },
+        { 'id': 11, 'group': 'Document', 'name': 'Paste in focused element using buffer', 'action': 'pasteinfocusedelement' },
+        { 'id': 12, 'group': 'Document', 'name': 'Paste in focused element using input', 'action': 'pasteusinginput' },
+        { 'id': 13, 'group': 'Document', 'name': 'Select element using selector', 'action': 'selectelementusingselector' },
+        { 'id': 14, 'group': 'Location', 'name': 'Back', 'action': 'back' },
+        { 'id': 15, 'group': 'Location', 'name': 'Forward', 'action': 'forward' },
+        { 'id': 16, 'group': 'Location', 'name': 'Reload', 'action': 'reload' },
+        { 'id': 17, 'group': 'Location', 'name': 'Copy current tab url', 'action': 'copyurl' },
 
     ];
 
