@@ -204,6 +204,8 @@ let handleAction = (action, count, selector, url, data, column, row, callback = 
 
     } else if (action === 'loadgooglesheets') {
 
+        debugger;
+
         Tabletop.init({
             key: url,
             callback: showInfo,
@@ -217,13 +219,15 @@ let handleAction = (action, count, selector, url, data, column, row, callback = 
         
 
     } else if (action === 'getvaluefromloadedsheet') {
+
+        debugger;
         
         var data  = JSON.parse(localStorage.dataFromSheet);
 
-        var rows = Object.values(data[column - 1]);
+        var selectedRow = Object.values(data[row - 1]);
         
-        copyToClipboard(rows[row - 1]);
-        localStorage.clipboardData = rows[row - 1];          
+        copyToClipboard(selectedRow[column - 1]);
+        localStorage.clipboardData = selectedRow[column - 1];          
         callback();
 
     } else {

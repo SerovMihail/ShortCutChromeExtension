@@ -55,7 +55,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
                 throw 'isNumber, not JSON';
 
             $scope.vm.flows.push({
-                index: $scope.vm.flows.length + 1,
+                index: $scope.vm.flows.length,
                 name: obj.name + '_1',
                 shortcuts: obj.shortcuts
             });
@@ -119,7 +119,7 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
         var shortcutInfo = flow.temp.newShortcut;
 
         flow.shortcuts.push({
-            index: flow.shortcuts.length + 1,
+            index: flow.shortcuts.length,
             action: shortcutInfo.type.action,
             name: shortcutInfo.type.name,
             count: shortcutInfo.count ? shortcutInfo.count : null,
@@ -153,6 +153,8 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
     // execute
 
     $scope.executeFlow = function (flowIndex) {
+
+        debugger;
 
         localStorage.currentFlow = JSON.stringify($scope.vm.flows[flowIndex].shortcuts);
 

@@ -12,8 +12,7 @@
 
     <!-- Scripts libs -->
     <script src="scripts/libs/JQuery/jquery-3.3.1.min.js"></script>
-    <script src="scripts/libs/anguluar/angular.min.js"></script>
-    <script src="scripts/libs/anguluar/directives/dnd-angular.Directive.js"></script>
+    <script src="scripts/libs/anguluar/angular.min.js"></script>    
     <script defer src="scripts/libs/fontawesome/font-awesome.js"></script>
 
 </head>
@@ -38,7 +37,7 @@
         </div>
 
         <div class="flows" ng-if='vm.flows.length > 0'>
-            <div class="flow-item mb-3" ng-repeat="flow in vm.flows track by $index">
+            <div class="flow-item mb-3" ng-repeat="flow in vm.flows">
 
                 <div class="item-header" ng-class='{"mb-0" : !flow.bodyVisible}'>
                     <div class="left-side">
@@ -59,7 +58,7 @@
                     </div>
                 </div>
 
-                <div ng-show='flow.error'>
+                <div ng-if='flow.error'>
                     <div class="alert alert-danger" role="alert" ng-bind="flow.error"></div>
                 </div>
 
@@ -67,79 +66,80 @@
                     <table class="table table-sm" style='margin-bottom: 0;'>
                         <thead>
                             <tr>
-                                <th style='border-top: 0; font-weight: 500; width: 6%;' scope="col" title="Drag and drop"></th>
+                                <!-- <th style='border-top: 0; font-weight: 500; width: 6%;' scope="col" title="Drag and drop"></th> -->
                                 <th style='border-top: 0; font-weight: 500; width: 25%;' scope="col" title="Short name of action">Action</th>
                                 <th style='border-top: 0; font-weight: 500;' scope="col" title='Count for tabs, Selector for element'>Info</th>
 
                                 <th style='border-top: 0; font-weight: 500;width: 10%;' scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody dnd-list="flow.shortcuts">
+                        <!-- <tbody dnd-list="flow.shortcuts"> -->
+                        <tbody>
 
-                            <!-- <tr ng-if="flow.shortcuts.length === 0">
+                            <tr ng-if="flow.shortcuts.length === 0">
                                 <td colspan="3">Shortcuts list is empty. Create new shortcut</td>
-                            </tr> -->
+                            </tr>
 
-                            <tr ng-show="flow.shortcuts.length > 0" 
-                                ng-repeat="shortcut in flow.shortcuts" 
+                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index" >
+                                <!-- ng-repeat="shortcut in flow.shortcuts track by shortcut.index" 
                                 dnd-draggable="shortcut" dnd-type="shortcut.action"
-                                dnd-moved="dndMoved(flow, $index);">
+                                dnd-moved="dndMoved(flow, $index);" -->
 
-                                <td>
+                                <!-- <td>
                                     <div title='drag and drop' dnd-handle class="handle">:::</div>
-                                </td>
+                                </td> -->
 
                                 <td>
-                                    <dnd-nodrag>{{shortcut.name}}</dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->{{shortcut.name}}<!--</dnd-nodrag> -->
                                 </td>
 
                                 <td ng-if="shortcut.action == 'tab'">
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.count'>
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                             </div>
                                         </div>
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
                                 </td>
 
                                 <td ng-if="shortcut.action == 'selectelementusingselector'">
 
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.selector'>
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                             </div>
                                         </div>
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
 
                                 </td>
                                 <td ng-if="shortcut.action == 'opentabbyurl' || shortcut.action == 'loadgooglesheets'">
 
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.url'>
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                             </div>
                                         </div>
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
 
                                 </td>
                                 <td ng-if="shortcut.action == 'pasteusinginput'">
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
                                         <div class="input-group input-group-sm">
                                             <input type="text" class="form-control input-sm-custom" required ng-model='shortcut.data'>
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                             </div>
                                         </div>
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
                                 </td>
                                 <td ng-if="shortcut.action == 'getvaluefromloadedsheet'">
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
 
                                         <div class="row">
                                             <div class="col-6">
@@ -147,18 +147,18 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="inputGroup-sizing-sm">Column</span>
                                                     </div>
-                                                    <input type="text" class="form-control" required ng-model='shortcut.column'>
+                                                    <input type="number" class="form-control" required ng-model='shortcut.column'>
                                                     <div class="input-group-append">
                                                         <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-6" title="Rememver first row is used as header. Use 2 index as first one">
                                                 <div class="input-group input-group-sm">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="inputGroup-sizing-sm">Row</span>
                                                     </div>
-                                                    <input type="text" class="form-control" required ng-model='shortcut.row'>
+                                                    <input type="number" class="form-control" required ng-model='shortcut.row'>
                                                     <div class="input-group-append">
                                                         <button type="submit" class="btn btn-secondary btn-sm btn-sm-custom" ng-click='updateShortcut()' title='Update'>↻</button>
                                                     </div>
@@ -166,7 +166,7 @@
                                             </div>
                                         </div>
 
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
                                 </td>
                                 <td ng-if="shortcut.action != 'selectelementusingselector' 
                                         && shortcut.action != 'tab'  
@@ -174,23 +174,23 @@
                                         && shortcut.action != 'pasteusinginput'
                                         && shortcut.action != 'loadgooglesheets'
                                         && shortcut.action != 'getvaluefromloadedsheet'">
-                                    <dnd-nodrag>-</dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->-<!--</dnd-nodrag> -->
                                 </td>
 
                                 <td>
-                                    <dnd-nodrag>
+                                    <!-- <dnd-nodrag> -->
                                         <button type="button" class="btn btn-outline-danger btn-sm btn-block" style='padding-top: 0px;' ng-click='removeShortcut(flow, shortcut.index)'
                                             title="Remove shortcut">x</button>
-                                    </dnd-nodrag>
+                                    <!--</dnd-nodrag> -->
                                 </td>
 
                             </tr>
 
-                            <tr class="dndPlaceholder">
+                            <!-- <tr class="dndPlaceholder">
                                 <td colspan="3" style="text-align: center;">
                                     <strong>Drop shortcut here</strong>
                                 </td>
-                            </tr>
+                            </tr> -->
 
                         </tbody>
                     </table>
@@ -248,7 +248,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm" title="Rememver first row is used as header. Use 2 index as first one">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">Row</span>
                                             </div>
