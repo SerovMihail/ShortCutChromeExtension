@@ -76,14 +76,13 @@
                         </thead>
                         <tbody dnd-list="flow.shortcuts">
 
-                            <tr ng-if="flow.shortcuts.length === 0">
+                            <!-- <tr ng-if="flow.shortcuts.length === 0">
                                 <td colspan="3">Shortcuts list is empty. Create new shortcut</td>
-                            </tr>
+                            </tr> -->
 
-
-
-
-                            <tr ng-show="flow.shortcuts.length > 0" ng-repeat="shortcut in flow.shortcuts track by $index" dnd-draggable="shortcut" dnd-type="shortcut.action"
+                            <tr ng-show="flow.shortcuts.length > 0" 
+                                ng-repeat="shortcut in flow.shortcuts" 
+                                dnd-draggable="shortcut" dnd-type="shortcut.action"
                                 dnd-moved="dndMoved(flow, $index);">
 
                                 <td>

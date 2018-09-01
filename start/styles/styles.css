@@ -111,9 +111,9 @@
 }
 
 .flow-item .handle {
-    cursor: move;  
+    cursor: move;
     top: 14px;
-  }
+}
 
 .table .input-sm-custom {
     height: 27px;
@@ -155,4 +155,8 @@
 
 .table td {
     vertical-align: middle !important;
+}
+
+.handle {
+    cursor: move;    
 }

@@ -220,10 +220,10 @@ let handleAction = (action, count, selector, url, data, column, row, callback = 
         
         var data  = JSON.parse(localStorage.dataFromSheet);
 
-        var rows = Object.values(data[column]);
+        var rows = Object.values(data[column - 1]);
         
-        copyToClipboard(rows[row]);
-        localStorage.clipboardData = rows[row];          
+        copyToClipboard(rows[row - 1]);
+        localStorage.clipboardData = rows[row - 1];          
         callback();
 
     } else {

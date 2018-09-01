@@ -127,8 +127,8 @@ app.controller('ShortcutsCtrl', ['$scope', function ($scope) {
             selector: shortcutInfo.selector ? shortcutInfo.selector : null,
             url: shortcutInfo.url ? shortcutInfo.url : null,
             data: shortcutInfo.data ? shortcutInfo.data : null,
-            column: shortcutInfo.column ? shortcutInfo.column - 1 : null,
-            row: shortcutInfo.row ? shortcutInfo.row - 1: null,
+            column: shortcutInfo.column ? shortcutInfo.column : null,
+            row: shortcutInfo.row ? shortcutInfo.row: null,
         });
 
         flow.temp = null;
